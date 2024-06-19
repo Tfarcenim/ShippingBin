@@ -1,5 +1,12 @@
 package tfar.shippingbin.platform.services;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import tfar.shippingbin.blockentity.ShippingBinBlockEntity;
+import tfar.shippingbin.inventory.CommonHandler;
+
 public interface IPlatformHelper {
 
     /**
@@ -33,4 +40,11 @@ public interface IPlatformHelper {
 
         return isDevelopmentEnvironment() ? "development" : "production";
     }
+
+
+    <F> void registerAll(Class<?> clazz, Registry<? super F> registry, Class<? super F> filter);
+    <H extends CommonHandler> H makeDummy(int slots);
+    ShippingBinBlockEntity blockEntity(BlockEntityType<ShippingBinBlockEntity> type, BlockPos pos, BlockState state);
+
+
 }
