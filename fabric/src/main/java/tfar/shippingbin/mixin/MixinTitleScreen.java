@@ -1,6 +1,6 @@
-package com.example.examplemod.mixin;
+package tfar.shippingbin.mixin;
 
-import com.example.examplemod.CommonClass;
+import tfar.shippingbin.ShippingBin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.TitleScreen;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,7 +14,7 @@ public class MixinTitleScreen {
     @Inject(at = @At("HEAD"), method = "init()V")
     private void init(CallbackInfo info) {
         
-        CommonClass.LOG.info("This line is printed by an example mod mixin from Fabric!");
-        CommonClass.LOG.info("MC Version: {}", Minecraft.getInstance().getVersionType());
+        ShippingBin.LOG.info("This line is printed by an example mod mixin from Fabric!");
+        ShippingBin.LOG.info("MC Version: {}", Minecraft.getInstance().getVersionType());
     }
 }

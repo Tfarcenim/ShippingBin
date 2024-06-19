@@ -7,7 +7,7 @@
     "mixins": [
     ],
     "client": [
-        "MixinTitleScreen"
+      "tfar.shippingbin.mixin.MixinTitleScreen"
     ],
     "server": [
     ],

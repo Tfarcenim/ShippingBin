@@ -1,6 +1,6 @@
-package com.example.examplemod;
+package tfar.shippingbin;
 
-import com.example.examplemod.platform.Services;
+import tfar.shippingbin.platform.Services;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Items;
 import org.slf4j.Logger;
@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 // import and access the vanilla codebase, libraries used by vanilla, and optionally third party libraries that provide
 // common compatible binaries. This means common code can not directly use loader specific concepts such as Forge events
 // however it will be compatible with all supported mod loaders.
-public class CommonClass {
+public class ShippingBin {
 
     public static final String MOD_ID = "examplemod";
     public static final String MOD_NAME = "ExampleMod";

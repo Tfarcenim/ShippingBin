@@ -1,19 +1,18 @@
-package com.example.examplemod;
+package tfar.shippingbin;
 
 import net.minecraftforge.fml.common.Mod;
 
-@Mod(CommonClass.MOD_ID)
-public class ExampleMod {
+@Mod(ShippingBin.MOD_ID)
+public class ShippingBinForge {
     
-    public ExampleMod() {
+    public ShippingBinForge() {
     
         // This method is invoked by the Forge mod loader when it is ready
         // to load your mod. You can access Forge and Common code in this
         // project.
     
         // Use Forge to bootstrap the Common mod.
-        CommonClass.LOG.info("Hello Forge world!");
-        CommonClass.init();
+        ShippingBin.init();
         
     }
 }
