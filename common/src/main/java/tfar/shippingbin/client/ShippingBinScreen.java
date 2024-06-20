@@ -24,8 +24,10 @@ public class ShippingBinScreen extends AbstractContainerScreen<ShippingBinMenu> 
     protected void init() {
         super.init();
 
-        addRenderableWidget(Button.builder(Component.literal("Input"),button -> sendButtonToServer(ShippingBinMenu.ButtonAction.INPUT)).bounds(leftPos,topPos,20,20).build());
-        addRenderableWidget(Button.builder(Component.literal("Output"),button -> sendButtonToServer(ShippingBinMenu.ButtonAction.OUTPUT)).bounds(leftPos+40,topPos,20,20).build());
+        addRenderableWidget(Button.builder(Component.literal("Input"),
+                button -> sendButtonToServer(ShippingBinMenu.ButtonAction.INPUT)).bounds(leftPos+70,topPos+3,36,14).build());
+        addRenderableWidget(Button.builder(Component.literal("Output"),
+                button -> sendButtonToServer(ShippingBinMenu.ButtonAction.OUTPUT)).bounds(leftPos+125,topPos+3,40,14).build());
 
     }
 

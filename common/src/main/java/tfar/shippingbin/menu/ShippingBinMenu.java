@@ -1,13 +1,18 @@
 package tfar.shippingbin.menu;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import tfar.shippingbin.init.ModMenuTypes;
 import tfar.shippingbin.inventory.CommonHandler;
 
@@ -34,10 +39,24 @@ public class ShippingBinMenu<H extends CommonHandler>  extends AbstractContainer
         }
 
         @Override
+        public void $setStack(int slot, ItemStack stack) {
+            active.$setStack(slot,stack);
+        }
+
+        @Override
         public ItemStack $getStack(int slot) {
             return active.$getStack(slot);
         }
 
+        @Override
+        public ItemStack $remove(int slot, int amount) {
+            return active.$remove(slot,amount);
+        }
+
+        @Override
+        public int $getMaxStackSize(int slot) {
+            return active.$getMaxStackSize(slot);
+        }
 
         //not used
         @Override
@@ -52,7 +71,35 @@ public class ShippingBinMenu<H extends CommonHandler>  extends AbstractContainer
 
         @Override
         public Slot addInvSlot(int slot, int x, int y) {
-            return active.addInvSlot(slot,x,y);
+            return new Slot(new SimpleContainer(0),slot,x,y){
+                @Override
+                public ItemStack getItem() {
+                    return active.$getStack(slot);
+                }
+
+                @Override
+                public void set(ItemStack $$0) {
+                    active.$setStack(slot,$$0);
+                    setChanged();
+                }
+
+                @Override
+                public void setChanged() {
+
+                }
+
+                @Override
+                public int getMaxStackSize() {
+                    return active.$getMaxStackSize(slot);
+                }
+
+                @Override
+                @NotNull
+                public ItemStack remove(int amount) {
+                    return active.$remove(slot,amount);
+                }
+
+            };
         }
 
         public void setActive(H active) {

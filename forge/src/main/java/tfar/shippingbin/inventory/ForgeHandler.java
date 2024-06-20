@@ -23,6 +23,16 @@ public class ForgeHandler extends ItemStackHandler implements CommonHandler {
     }
 
     @Override
+    public void $setStack(int slot, ItemStack stack) {
+        setStackInSlot(slot, stack);
+    }
+
+    @Override
+    public ItemStack $remove(int slot, int amount) {
+        return extractItem(slot,amount,false);
+    }
+
+    @Override
     public CompoundTag $serialize() {
         return serializeNBT();
     }
@@ -35,5 +45,10 @@ public class ForgeHandler extends ItemStackHandler implements CommonHandler {
     @Override
     public Slot addInvSlot(int slot, int x, int y) {
         return new SlotItemHandler(this,slot,x,y);
+    }
+
+    @Override
+    public int $getMaxStackSize(int slot) {
+        return getSlotLimit(slot);
     }
 }
