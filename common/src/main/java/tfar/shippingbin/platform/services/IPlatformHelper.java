@@ -44,7 +44,7 @@ public interface IPlatformHelper {
 
     <F> void registerAll(Class<?> clazz, Registry<? super F> registry, Class<? super F> filter);
     <H extends CommonHandler> H makeDummy(int slots);
-    ShippingBinBlockEntity blockEntity(BlockEntityType<ShippingBinBlockEntity> type, BlockPos pos, BlockState state);
+    <H extends CommonHandler> ShippingBinBlockEntity<H> blockEntity(BlockEntityType<ShippingBinBlockEntity<?>> type, BlockPos pos, BlockState state);
 
 
 }

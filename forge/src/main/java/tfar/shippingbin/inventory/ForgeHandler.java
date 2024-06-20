@@ -1,8 +1,10 @@
 package tfar.shippingbin.inventory;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
 public class ForgeHandler extends ItemStackHandler implements CommonHandler {
 
@@ -21,11 +23,6 @@ public class ForgeHandler extends ItemStackHandler implements CommonHandler {
     }
 
     @Override
-    public void $setStack(int slot, ItemStack stack) {
-        setStackInSlot(slot,stack);
-    }
-
-    @Override
     public CompoundTag $serialize() {
         return serializeNBT();
     }
@@ -33,5 +30,10 @@ public class ForgeHandler extends ItemStackHandler implements CommonHandler {
     @Override
     public void $deserialize(CompoundTag invTag) {
         deserializeNBT(invTag);
+    }
+
+    @Override
+    public Slot addInvSlot(int slot, int x, int y) {
+        return new SlotItemHandler(this,slot,x,y);
     }
 }

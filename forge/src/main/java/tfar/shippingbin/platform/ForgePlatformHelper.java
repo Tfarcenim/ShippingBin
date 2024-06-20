@@ -67,8 +67,8 @@ public class ForgePlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public ShippingBinBlockEntity blockEntity(BlockEntityType<ShippingBinBlockEntity> type, BlockPos pos, BlockState state) {
-        return new ShippingBinBlockEntityForge(type, pos, state);
+   public <H extends CommonHandler> ShippingBinBlockEntity<H> blockEntity(BlockEntityType<ShippingBinBlockEntity<?>> type, BlockPos pos, BlockState state) {
+        return (ShippingBinBlockEntity<H>) new ShippingBinBlockEntityForge(type, pos, state);
     }
 
 }
