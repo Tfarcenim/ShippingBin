@@ -43,17 +43,16 @@ public class ForgeHandler extends SortingItemStackHandler implements CommonHandl
     }
 
     @Override
-    public ItemStack $slotlessInsertStack(@NotNull ItemStack stack, boolean simulate) {
+    public ItemStack $slotlessInsertStack(@NotNull ItemStack stack, int amount, boolean simulate) {
+        if (amount<= 0) return stack;
+        ItemStack copy = stack.copy();
+        ItemStack split = copy.split(amount);
         for (int i = 0; i < $getSlotCount();i++) {
-            stack = $insertStack(i,stack,simulate);
-            if (stack.isEmpty()) break;
+            split = $insertStack(i,split,simulate);
+            if (split.isEmpty()) break;
         }
-        return stack;
-    }
-
-    @Override
-    public ItemStack $remove(int slot, int amount) {
-        return extractItem(slot,amount,false);
+        copy.grow(split.getCount());
+        return copy;
     }
 
     @Override
