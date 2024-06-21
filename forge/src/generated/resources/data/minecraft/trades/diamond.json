@@ -1,0 +1,11 @@
+{
+  "input": {
+    "count": 1,
+    "ingredient": {
+      "item": "minecraft:dirt"
+    }
+  },
+  "output": {
+    "item": "minecraft:diamond"
+  }
+}

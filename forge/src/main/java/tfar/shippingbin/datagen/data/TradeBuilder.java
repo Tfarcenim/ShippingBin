@@ -13,21 +13,27 @@ import java.util.function.Consumer;
 public class TradeBuilder {
 
     private final ItemStack result;
+    private final int count;
     private final Ingredient ingredient;
 
-    public TradeBuilder(ItemStack stack,Ingredient ingredient) {
+    public TradeBuilder(ItemStack stack,Ingredient ingredient,int count) {
         this.result = stack;
         this.ingredient = ingredient;
+        this.count = count;
     }
 
     public static TradeBuilder builder(ItemLike output,ItemLike input) {
-        Ingredient ingredient = Ingredient.of(output);
-        ItemStack stack = new ItemStack(input);
-        return new TradeBuilder(stack,ingredient);
+        Ingredient ingredient = Ingredient.of(input);
+        ItemStack stack = new ItemStack(output);
+        return builderWithCount(stack,ingredient,1);
+    }
+
+    public static TradeBuilder builderWithCount(ItemStack output,Ingredient input,int count) {
+        return new TradeBuilder(output,input,count);
     }
 
     public void save(Consumer<FinishedTrade> consumer, ResourceLocation pRecipeId) {
-        consumer.accept(new Result(pRecipeId, this.result, ingredient));
+        consumer.accept(new Result(pRecipeId, this.result, ingredient, count));
     }
 
     public void save(Consumer<FinishedTrade> consumer) {
@@ -43,17 +49,21 @@ public class TradeBuilder {
         private final ResourceLocation tradeId;
         private final ItemStack result;
         private final Ingredient ingredient;
+        private final int count;
 
-        public Result(ResourceLocation tradeId, ItemStack result, Ingredient ingredient) {
-
+        public Result(ResourceLocation tradeId, ItemStack result, Ingredient ingredient, int count) {
             this.tradeId = tradeId;
             this.result = result;
             this.ingredient = ingredient;
+            this.count = count;
         }
 
         @Override
         public void serializeRecipeData(JsonObject pJson) {
-            pJson.add("input",ingredient.toJson());
+            JsonObject input = new JsonObject();
+            input.add("ingredient",ingredient.toJson());
+            input.addProperty("count",count);
+            pJson.add("input",input);
             pJson.add("output",writeStack(result));
         }
 

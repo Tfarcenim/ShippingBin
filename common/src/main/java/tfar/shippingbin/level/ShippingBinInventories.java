@@ -41,6 +41,10 @@ public class ShippingBinInventories extends SavedData {
         return compoundTag;
     }
 
+    public Map<UUID, Pair<CommonHandler, CommonHandler>> getHandlerMap() {
+        return handlerMap;
+    }
+
     public Pair<CommonHandler,CommonHandler> getInventory(UUID uuid) {
         return handlerMap.computeIfAbsent(uuid,uuid1 -> Pair.of(CommonHandler.create(CommonHandler.SLOTS),CommonHandler.create(CommonHandler.SLOTS)));
     }

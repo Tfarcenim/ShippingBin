@@ -47,6 +47,10 @@ public class TradeManager extends SimpleJsonResourceReloadListener {
         return this.hasErrors;
     }
 
+    public Map<ResourceLocation, Trade> getTrades() {
+        return trades;
+    }
+
     public static Trade fromJson(ResourceLocation id, JsonObject jsonObject) {
         return Trade.deserialize(jsonObject);
     }

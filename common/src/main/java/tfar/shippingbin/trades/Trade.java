@@ -16,19 +16,31 @@ import java.util.Objects;
 
 public class Trade {
 
-    private final Ingredient input;
-    private final ItemStack output;
+    protected final Ingredient input;
+    protected final int count;
+    protected final ItemStack output;
 
-    public Trade(Ingredient input, ItemStack output) {
-
+    public Trade(Ingredient input,int count, ItemStack output) {
         this.input = input;
+        this.count = count;
         this.output = output;
     }
 
+    public boolean matches(ItemStack stack) {
+        return input.test(stack) && stack.getCount() >= count;
+    }
+
+    public ItemStack getOutput() {
+        return output;
+    }
+
     public static Trade deserialize(JsonObject jsonObject) {
-        Ingredient ingredient = Ingredient.fromJson(jsonObject.getAsJsonObject("input"));
+        JsonObject input = jsonObject.getAsJsonObject("input");
+        Ingredient ingredient = Ingredient.fromJson(input.getAsJsonObject("ingredient"));
+        int count = GsonHelper.getAsInt(input,"count",1);
+
         ItemStack stack = getItemStack(jsonObject.getAsJsonObject("output"),true);
-        return new Trade(ingredient, stack);
+        return new Trade(ingredient,count, stack);
     }
 
     public static ItemStack getItemStack(JsonObject json, boolean readNBT) {
