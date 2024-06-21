@@ -1,0 +1,8 @@
+{
+  "input": {
+    "item": "minecraft:diamond"
+  },
+  "output": {
+    "item": "minecraft:dirt"
+  }
+}

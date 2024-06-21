@@ -13,6 +13,7 @@ import tfar.shippingbin.ShippingBin;
 import tfar.shippingbin.datagen.data.ModBlockTagsProvider;
 import tfar.shippingbin.datagen.data.ModLootTableProvider;
 import tfar.shippingbin.datagen.data.ModRecipeProvider;
+import tfar.shippingbin.datagen.data.TradeProvider;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
@@ -30,6 +31,8 @@ public class ModDatagen {
         dataGenerator.addProvider(true, ModLootTableProvider.create(packOutput));
         dataGenerator.addProvider(true,new ModBlockTagsProvider(packOutput,lookupProvider,existingFileHelper));
         dataGenerator.addProvider(true,new ModRecipeProvider(packOutput));
+
+        dataGenerator.addProvider(true,new TradeProvider(packOutput));
 
     }
 

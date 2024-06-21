@@ -25,6 +25,8 @@ public class ShippingBin {
     public static final String MOD_NAME = "ShippingBin";
     public static final Logger LOG = LoggerFactory.getLogger(MOD_NAME);
 
+    public static final String FOLDER = "trades";
+
     // The loader specific projects are able to import and use any code from the common project. This allows you to
     // write the majority of your code here and load it from your loader specific projects. This example has some
     // code that gets invoked by the entry point of the loader specific projects.
