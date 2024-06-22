@@ -4,12 +4,12 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.entity.player.StackedContents;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
+import net.minecraftforge.event.level.SleepFinishedTimeEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -19,19 +19,13 @@ import net.minecraftforge.registries.RegisterEvent;
 import org.apache.commons.lang3.tuple.Pair;
 import tfar.shippingbin.client.ModClientForge;
 import tfar.shippingbin.datagen.ModDatagen;
-import tfar.shippingbin.inventory.CommonHandler;
-import tfar.shippingbin.level.ShippingBinInventories;
-import tfar.shippingbin.trades.Trade;
 import tfar.shippingbin.trades.TradeManager;
-import tfar.shippingbin.trades.TradeMatcher;
 
 import java.util.*;
 import java.util.function.Supplier;
 
 @Mod(ShippingBin.MOD_ID)
 public class ShippingBinForge {
-
-    public static ShippingBinForge instance;
 
     public ShippingBinForge() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -43,64 +37,32 @@ public class ShippingBinForge {
         bus.addListener(this::setup);
         MinecraftForge.EVENT_BUS.addListener(this::reloadListener);
         MinecraftForge.EVENT_BUS.addListener(this::serverTick);
+        MinecraftForge.EVENT_BUS.addListener(this::onSleep);
 
         if (FMLEnvironment.dist.isClient()) {
             ModClientForge.init(bus);
         }
-        instance = this;
 
         // Use Forge to bootstrap the Common mod.
         ShippingBin.init();
 
     }
 
-    public TradeManager tradeManager;
+    private void onSleep(SleepFinishedTimeEvent event) {
+        long newTime = event.getNewTime();
+        Level level = (Level) event.getLevel();
+        ShippingBin.onSleep(level,newTime);
+    }
 
     private void serverTick(TickEvent.ServerTickEvent event) {
         MinecraftServer server = event.getServer();
         if (event.phase == TickEvent.Phase.START && server.overworld().getDayTime() % 24000 == 18000) {
-            sellItems(server);
-        }
-    }
-
-    private void sellItems(MinecraftServer server) {
-        ShippingBinInventories shippingBinInventories = ShippingBinInventories.getOrCreateInstance(server);
-        for (Map.Entry<UUID,Pair<CommonHandler,CommonHandler>> entry : shippingBinInventories.getHandlerMap().entrySet()) {
-            Pair<CommonHandler,CommonHandler> invs = entry.getValue();
-            CommonHandler input = invs.getKey();
-            CommonHandler output = invs.getValue();
-
-            TradeMatcher tradeMatcher = new TradeMatcher();
-
-            for (int i = 0; i < input.$getSlotCount();i++) {
-                ItemStack stack = input.$getStack(i);
-                if (!stack.isEmpty()) {
-                    tradeMatcher.account(stack);
-                }
-            }
-
-
-            Map<ResourceLocation,Integer> counts = new HashMap<>();
-
-
-
-            for (Map.Entry<ResourceLocation, Trade> tradeEntry : tradeManager.getTrades().entrySet()) {
-                ResourceLocation resourceLocation = tradeEntry.getKey();
-                Trade trade = tradeEntry.getValue();
-                int countTrades = tradeMatcher.countTrades(trade,false);
-                if (countTrades > 0) {
-                    tradeMatcher.fillOutputs(trade,countTrades);
-                    counts.put(resourceLocation,countTrades);
-                }
-            }
-
-            tradeMatcher.trySellItems(input,output,counts,tradeManager.getTrades());
-
+            ShippingBin.sellItems(server);
         }
     }
 
     private void reloadListener(AddReloadListenerEvent event) {
-        event.addListener(tradeManager = new TradeManager());
+        event.addListener(ShippingBin.serverTradeManager = new TradeManager());
     }
 
     public static Map<Registry<?>, List<Pair<ResourceLocation, Supplier<?>>>> registerLater = new HashMap<>();

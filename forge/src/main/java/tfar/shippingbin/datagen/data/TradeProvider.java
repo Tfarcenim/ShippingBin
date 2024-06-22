@@ -40,6 +40,7 @@ public class TradeProvider implements DataProvider {
 
     protected void buildRecipes(Consumer<FinishedTrade> consumer) {
         TradeBuilder.builder(Items.DIAMOND,Items.DIRT).save(consumer);
+        TradeBuilder.builderWithCount(Items.GOLD_INGOT,Items.IRON_INGOT,2);
     }
 
         @Override

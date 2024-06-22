@@ -9,6 +9,7 @@ import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.NotNull;
+import tfar.shippingbin.ShippingBin;
 
 import java.util.List;
 
@@ -56,7 +57,7 @@ public  abstract class SortingItemStackHandler implements IItemHandlerModifiable
     public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
         if (stack.isEmpty()) return ItemStack.EMPTY;
 
-//        if (!isItemValid(slot, stack)) return stack;
+        if (!isItemValid(slot, stack)) return stack;
 
 
         ItemStack existing = this.stacks.get(slot);
@@ -146,7 +147,6 @@ public  abstract class SortingItemStackHandler implements IItemHandlerModifiable
 
     @Override
     public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-        if (slot > stacks.size()) return false;
         return true;
     }
 }

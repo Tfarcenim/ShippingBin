@@ -32,6 +32,10 @@ public class TradeBuilder {
         return new TradeBuilder(output,input,count);
     }
 
+    public static TradeBuilder builderWithCount(ItemLike output,Item input,int count) {
+        return builderWithCount(new ItemStack(output),Ingredient.of(input),count);
+    }
+
     public void save(Consumer<FinishedTrade> consumer, ResourceLocation pRecipeId) {
         consumer.accept(new Result(pRecipeId, this.result, ingredient, count));
     }

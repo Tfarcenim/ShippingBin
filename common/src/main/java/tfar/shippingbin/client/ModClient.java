@@ -19,5 +19,7 @@ public class ModClient {
 
     }
 
-
+    public static TradeManager getTradeManager() {
+        return tradeManager;
+    }
 }
