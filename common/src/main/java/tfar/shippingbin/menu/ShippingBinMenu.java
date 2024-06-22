@@ -11,6 +11,7 @@ import tfar.shippingbin.init.ModMenuTypes;
 import tfar.shippingbin.inventory.CommonHandler;
 
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public class ShippingBinMenu<H extends CommonHandler> extends AbstractContainerMenu {
 
@@ -81,6 +82,16 @@ public class ShippingBinMenu<H extends CommonHandler> extends AbstractContainerM
         }
 
         @Override
+        public boolean $isValid(ItemStack stack) {
+            return wrapped.$isValid(stack);
+        }
+
+        @Override
+        public void $setPredicate(Predicate<ItemStack> predicate) {
+            wrapped.$setPredicate(predicate);
+        }
+
+        @Override
         public Slot addInvSlot(int slot, int x, int y) {
             return new Slot(new SimpleContainer(0), slot, x, y) {
 
@@ -130,6 +141,10 @@ public class ShippingBinMenu<H extends CommonHandler> extends AbstractContainerM
                     return Optional.of(extract);
                 }
 
+                @Override
+                public boolean mayPlace(ItemStack stack) {
+                    return $isValid(stack);
+                }
 
                 @Override
                 public ItemStack safeInsert(ItemStack stack, int amount) {
@@ -140,36 +155,16 @@ public class ShippingBinMenu<H extends CommonHandler> extends AbstractContainerM
         }
     }
 
-
     public class OutputWrapper extends HandlerWrapper {
-
         public OutputWrapper(H wrapped) {
             super(wrapped);
         }
 
         @Override
-        public ItemStack $insertStack(int slot, @NotNull ItemStack stack, boolean simulate) {
-            return stack;
-        }
-
-        @Override
-        public ItemStack $slotlessInsertStack(@NotNull ItemStack stack, int amount, boolean simulate) {
-            return stack;
+        public boolean $isValid(ItemStack stack) {
+            return false;
         }
     }
-
-    public class InputWrapper extends HandlerWrapper {
-
-        public InputWrapper(H wrapped) {
-            super(wrapped);
-        }
-
-        @Override
-        public ItemStack $extractStack(int slot, int amount, boolean simulate) {
-            return ItemStack.EMPTY;
-        }
-    }
-
 
     public ShippingBinMenu(MenuType<?> type, int id, Inventory inventory, H input, H output) {
         super(type, id);
@@ -206,78 +201,9 @@ public class ShippingBinMenu<H extends CommonHandler> extends AbstractContainerM
         }
     }
 
-    public void doClick(int slotId, int button, ClickType clickType, Player player) {
-
-        if (clickType ==  ClickType.QUICK_CRAFT) return;
-
-        super.doClick(slotId, button, clickType, player);
-        /*
-        Slot slot = slotId >= 0 ? slots.get(slotId) : null;
-        switch (clickType) {
-            case PICKUP -> {
-                if (slotId >= CommonHandler.SLOTS) {
-                    super.doClick(slotId, button, clickType, player);
-                } else {
-                    int count;
-                    ClickAction clickAction = button == 0 ? ClickAction.PRIMARY : ClickAction.SECONDARY;
-                    if (slot == null) return;
-                    ItemStack existing = slot.getItem();
-                    ItemStack carried = getCarried();
-
-                    if (existing.isEmpty()) {
-                        for (int i = 0; i < CommonHandler.SLOTS; i++) {
-                            Slot otherSlot = slots.get(i);
-                            ItemStack otherExisting = otherSlot.getItem();
-
-                            if (!carried.isEmpty()) {
-                                count = clickAction == ClickAction.PRIMARY ? carried.getCount() : 1;
-                                this.setCarried(otherSlot.safeInsert(carried, count));
-                            }
-                        }
-                    } else {
-                        if (slot.mayPickup(player)) {
-                            if (carried.isEmpty()) {
-                                count = clickAction == ClickAction.PRIMARY ? existing.getCount() : (existing.getCount() + 1) / 2;
-                                Optional<ItemStack> optional = slot.tryRemove(count, Integer.MAX_VALUE, player);
-                                optional.ifPresent(($$2x) -> {
-                                    this.setCarried($$2x);
-                                    slot.onTake(player, $$2x);
-                                });
-                            }
-                        } else if (slot.mayPlace(carried)) {
-                            if (ItemStack.isSameItemSameTags(existing, carried)) {
-                                count = clickAction == ClickAction.PRIMARY ? carried.getCount() : 1;
-                                this.setCarried(slot.safeInsert(carried, count));
-                            } else if (carried.getCount() <= slot.getMaxStackSize(carried)) {
-                                this.setCarried(existing);
-                                slot.setByPlayer(carried);
-                            }
-                        } else if (ItemStack.isSameItemSameTags(existing, carried)) {
-                            Optional<ItemStack> optional = slot.tryRemove(existing.getCount(), carried.getMaxStackSize() - carried.getCount(), player);
-                            optional.ifPresent((stack) -> {
-                                carried.grow(stack.getCount());
-                                slot.onTake(player, stack);
-                            });
-                        }
-                    }
-                }
-            }
-            case QUICK_MOVE -> {
-                super.doClick(slotId, button, clickType, player);
-            }
-            case SWAP -> {
-
-            }
-
-            case CLONE -> {
-            }
-            case THROW -> {
-            }
-            case QUICK_CRAFT -> {
-            }
-            case PICKUP_ALL -> {
-            }
-        }*/
+    @Override
+    public boolean canDragTo(Slot slot) {
+        return slot.index >= inputWrapper.$getSlotCount() + outputWrapper.$getSlotCount();
     }
 
     @Override
@@ -319,6 +245,98 @@ public class ShippingBinMenu<H extends CommonHandler> extends AbstractContainerM
         }
         return stack;
     }
+
+
+    /**
+     * Merges provided ItemStack with the first available one in the container/player inventor between minIndex
+     * (included) and maxIndex (excluded). Args : stack, minIndex, maxIndex, negativDirection. [!] the Container
+     * implementation do not check if the item is valid for the slot
+     */
+    @Override
+    protected boolean moveItemStackTo(ItemStack pStack, int pStartIndex, int pEndIndex, boolean pReverseDirection) {
+        boolean flag = false;
+        int i = pStartIndex;
+        if (pReverseDirection) {
+            i = pEndIndex - 1;
+        }
+
+        if (pStack.isStackable()) {
+            while(!pStack.isEmpty()) {
+                if (pReverseDirection) {
+                    if (i < pStartIndex) {
+                        break;
+                    }
+                } else if (i >= pEndIndex) {
+                    break;
+                }
+
+                Slot slot = this.slots.get(i);
+                ItemStack itemstack = slot.getItem();
+                if (!itemstack.isEmpty() && slot.mayPlace(pStack) && ItemStack.isSameItemSameTags(pStack, itemstack)) {
+                    int j = itemstack.getCount() + pStack.getCount();
+                    int maxSize = Math.min(slot.getMaxStackSize(), pStack.getMaxStackSize());
+                    if (j <= maxSize) {
+                        pStack.setCount(0);
+                        itemstack.setCount(j);
+                        slot.setChanged();
+                        flag = true;
+                    } else if (itemstack.getCount() < maxSize) {
+                        pStack.shrink(maxSize - itemstack.getCount());
+                        itemstack.setCount(maxSize);
+                        slot.setChanged();
+                        flag = true;
+                    }
+                }
+
+                if (pReverseDirection) {
+                    --i;
+                } else {
+                    ++i;
+                }
+            }
+        }
+
+        if (!pStack.isEmpty()) {
+            if (pReverseDirection) {
+                i = pEndIndex - 1;
+            } else {
+                i = pStartIndex;
+            }
+
+            while(true) {
+                if (pReverseDirection) {
+                    if (i < pStartIndex) {
+                        break;
+                    }
+                } else if (i >= pEndIndex) {
+                    break;
+                }
+
+                Slot slot1 = this.slots.get(i);
+                ItemStack itemstack1 = slot1.getItem();
+                if (itemstack1.isEmpty() && slot1.mayPlace(pStack)) {
+                    if (pStack.getCount() > slot1.getMaxStackSize()) {
+                        slot1.setByPlayer(pStack.split(slot1.getMaxStackSize()));
+                    } else {
+                        slot1.setByPlayer(pStack.split(pStack.getCount()));
+                    }
+
+                    slot1.setChanged();
+                    flag = true;
+                    break;
+                }
+
+                if (pReverseDirection) {
+                    --i;
+                } else {
+                    ++i;
+                }
+            }
+        }
+
+        return flag;
+    }
+
 
     @Override
     public boolean stillValid(Player player) {

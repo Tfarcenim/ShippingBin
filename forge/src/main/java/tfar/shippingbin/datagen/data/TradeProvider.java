@@ -1,11 +1,9 @@
 package tfar.shippingbin.datagen.data;
 
 import com.google.common.collect.Sets;
-import com.google.gson.JsonObject;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import tfar.shippingbin.ShippingBin;
@@ -18,29 +16,29 @@ import java.util.function.Consumer;
 
 public class TradeProvider implements DataProvider {
 
-    protected final PackOutput.PathProvider recipePathProvider;
+    protected final PackOutput.PathProvider tradePathProvider;
 
 
     public TradeProvider(PackOutput pOutput) {
-        this.recipePathProvider = pOutput.createPathProvider(PackOutput.Target.DATA_PACK, ShippingBin.FOLDER);
+        this.tradePathProvider = pOutput.createPathProvider(PackOutput.Target.DATA_PACK, ShippingBin.FOLDER);
     }
 
     public CompletableFuture<?> run(CachedOutput pOutput) {
         Set<ResourceLocation> set = Sets.newHashSet();
         List<CompletableFuture<?>> list = new ArrayList<>();
-        this.buildRecipes((recipe) -> {
-            if (!set.add(recipe.getId())) {
-                throw new IllegalStateException("Duplicate trade " + recipe.getId());
+        this.buildTrades((trade) -> {
+            if (!set.add(trade.getId())) {
+                throw new IllegalStateException("Duplicate trade " + trade.getId());
             } else {
-                list.add(DataProvider.saveStable(pOutput, recipe.serializeTrade(), this.recipePathProvider.json(recipe.getId())));
+                list.add(DataProvider.saveStable(pOutput, trade.serializeTrade(), this.tradePathProvider.json(trade.getId())));
             }
         });
         return CompletableFuture.allOf(list.toArray(CompletableFuture[]::new));
     }
 
-    protected void buildRecipes(Consumer<FinishedTrade> consumer) {
+    protected void buildTrades(Consumer<FinishedTrade> consumer) {
         TradeBuilder.builder(Items.DIAMOND,Items.DIRT).save(consumer);
-        TradeBuilder.builderWithCount(Items.GOLD_INGOT,Items.IRON_INGOT,2);
+        TradeBuilder.builderWithCount(Items.GOLD_INGOT,Items.IRON_INGOT,2).save(consumer);
     }
 
         @Override

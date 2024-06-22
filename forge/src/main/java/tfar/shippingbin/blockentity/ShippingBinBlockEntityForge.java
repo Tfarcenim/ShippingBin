@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tfar.shippingbin.ShippingBin;
 import tfar.shippingbin.inventory.ForgeHandler;
+import tfar.shippingbin.level.ShippingBinInventories;
 
 public class ShippingBinBlockEntityForge extends ShippingBinBlockEntity<ForgeHandler> {
     public ShippingBinBlockEntityForge(BlockEntityType<?> $$0, BlockPos $$1, BlockState $$2) {
@@ -49,7 +50,7 @@ public class ShippingBinBlockEntityForge extends ShippingBinBlockEntity<ForgeHan
 
         @Override
         public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-            if (slot < input.$getSlotCount()) {
+            if (slot < input.$getSlotCount() && isItemValid(slot,stack)) {
                 return input.insertItem(slot,stack,simulate);
             }
             return stack;
@@ -83,7 +84,7 @@ public class ShippingBinBlockEntityForge extends ShippingBinBlockEntity<ForgeHan
 
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            return slot < input.$getSlotCount();
+            return ShippingBinInventories.ONLY_INPUTS.test(stack);
         }
     }
 

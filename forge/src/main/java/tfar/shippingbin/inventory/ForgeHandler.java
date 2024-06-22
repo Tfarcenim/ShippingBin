@@ -6,7 +6,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Predicate;
+
 public class ForgeHandler extends SortingItemStackHandler implements CommonHandler {
+
+    protected Predicate<ItemStack> predicate = stack -> true;
 
     public ForgeHandler(int slots) {
         super(slots);
@@ -42,18 +46,7 @@ public class ForgeHandler extends SortingItemStackHandler implements CommonHandl
         return extractItem(slot, amount, simulate);
     }
 
-    @Override
-    public ItemStack $slotlessInsertStack(@NotNull ItemStack stack, int amount, boolean simulate) {
-        if (amount<= 0) return stack;
-        ItemStack copy = stack.copy();
-        ItemStack split = copy.split(amount);
-        for (int i = 0; i < $getSlotCount();i++) {
-            split = $insertStack(i,split,simulate);
-            if (split.isEmpty()) break;
-        }
-        copy.grow(split.getCount());
-        return copy;
-    }
+
 
     @Override
     public CompoundTag $serialize() {
@@ -73,5 +66,15 @@ public class ForgeHandler extends SortingItemStackHandler implements CommonHandl
     @Override
     public int $getMaxStackSize(int slot) {
         return getSlotLimit(slot);
+    }
+
+    @Override
+    public boolean $isValid(ItemStack stack) {
+        return predicate.test(stack);
+    }
+
+    @Override
+    public void $setPredicate(Predicate<ItemStack> predicate) {
+        this.predicate = predicate;
     }
 }

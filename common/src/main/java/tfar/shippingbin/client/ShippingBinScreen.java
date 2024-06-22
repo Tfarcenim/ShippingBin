@@ -25,6 +25,11 @@ public class ShippingBinScreen extends AbstractContainerScreen<ShippingBinMenu> 
     }
 
     @Override
+    public boolean mouseDragged(double $$0, double $$1, int $$2, double $$3, double $$4) {
+        return super.mouseDragged($$0, $$1, $$2, $$3, $$4);
+    }
+
+    @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;

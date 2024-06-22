@@ -5,6 +5,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.saveddata.SavedData;
 import org.apache.commons.lang3.tuple.Pair;
 import tfar.shippingbin.ShippingBin;
@@ -14,11 +15,14 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 public class ShippingBinInventories extends SavedData {
 
     protected final ServerLevel level;
     Map<UUID, Pair<CommonHandler,CommonHandler>> handlerMap = new HashMap<>();
+
+    public static final Predicate<ItemStack> ONLY_INPUTS = stack -> ShippingBin.getTradeManager().isInput(stack);
 
     public ShippingBinInventories(ServerLevel level) {
         this.level = level;
@@ -46,7 +50,11 @@ public class ShippingBinInventories extends SavedData {
     }
 
     public Pair<CommonHandler,CommonHandler> getInventory(UUID uuid) {
-        return handlerMap.computeIfAbsent(uuid,uuid1 -> Pair.of(CommonHandler.create(CommonHandler.SLOTS),CommonHandler.create(CommonHandler.SLOTS)));
+        return handlerMap.computeIfAbsent(uuid,uuid1 -> {
+            CommonHandler input = CommonHandler.create(CommonHandler.SLOTS);
+            input.$setPredicate(ONLY_INPUTS);
+            return Pair.of(input, CommonHandler.create(CommonHandler.SLOTS));
+        });
     }
 
     protected void load(CompoundTag compoundTag) {
@@ -55,6 +63,7 @@ public class ShippingBinInventories extends SavedData {
             CompoundTag compoundTag1 = (CompoundTag)tag;
             UUID uuid = compoundTag1.getUUID("uuid");
             CommonHandler commonHandler = CommonHandler.create(CommonHandler.SLOTS);
+            commonHandler.$setPredicate(ONLY_INPUTS);
             commonHandler.$deserialize(compoundTag1.getCompound("input"));
             CommonHandler output = CommonHandler.create(CommonHandler.SLOTS);
             output.$deserialize(compoundTag1.getCompound("output"));
@@ -78,8 +87,8 @@ public class ShippingBinInventories extends SavedData {
     }
 
     public static ShippingBinInventories loadStatic(CompoundTag compoundTag, ServerLevel level) {
-        ShippingBinInventories dankSavedData = new ShippingBinInventories(level);
-        dankSavedData.load(compoundTag);
-        return dankSavedData;
+        ShippingBinInventories inventories = new ShippingBinInventories(level);
+        inventories.load(compoundTag);
+        return inventories;
     }
 }

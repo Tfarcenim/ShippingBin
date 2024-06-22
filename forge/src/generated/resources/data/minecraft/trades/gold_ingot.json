@@ -1,0 +1,11 @@
+{
+  "input": {
+    "count": 2,
+    "ingredient": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "output": {
+    "item": "minecraft:gold_ingot"
+  }
+}

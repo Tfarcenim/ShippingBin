@@ -102,11 +102,16 @@ public class ShippingBin {
         }
     }
 
-    public static TradeManager getTradeManager(boolean client) {
-        if (client) {
+    public static TradeManager getTradeManager() {
+        if (serverTradeManager == null) {
             return ModClient.getTradeManager();
         } else {
             return serverTradeManager;
         }
     }
+
+    public static void setTradeManager(TradeManager tradeManager) {
+        serverTradeManager = tradeManager;
+    }
+
 }

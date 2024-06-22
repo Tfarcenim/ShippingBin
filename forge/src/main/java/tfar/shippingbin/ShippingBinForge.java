@@ -62,7 +62,9 @@ public class ShippingBinForge {
     }
 
     private void reloadListener(AddReloadListenerEvent event) {
-        event.addListener(ShippingBin.serverTradeManager = new TradeManager());
+        TradeManager tradeManager = new TradeManager();
+        ShippingBin.setTradeManager(tradeManager);
+        event.addListener(tradeManager);
     }
 
     public static Map<Registry<?>, List<Pair<ResourceLocation, Supplier<?>>>> registerLater = new HashMap<>();

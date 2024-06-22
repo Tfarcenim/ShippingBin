@@ -7,6 +7,8 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import tfar.shippingbin.platform.Services;
 
+import java.util.function.Predicate;
+
 public interface CommonHandler {
     static int SLOTS = 27;
     int $getSlotCount();
@@ -16,10 +18,23 @@ public interface CommonHandler {
     void $deserialize(CompoundTag invTag);
     Slot addInvSlot(int slot, int x, int y);
     int $getMaxStackSize(int slot);
-
     ItemStack $insertStack(int slot, @NotNull ItemStack stack, boolean simulate);
-    ItemStack $slotlessInsertStack(@NotNull ItemStack stack,int amount, boolean simulate);
+    default ItemStack $slotlessInsertStack(@NotNull ItemStack stack,int amount, boolean simulate){
+        if (amount<= 0) return stack;
+        if (!$isValid(stack))return stack;
+        ItemStack copy = stack.copy();
+        ItemStack split = copy.split(amount);
+        for (int i = 0; i < $getSlotCount();i++) {
+            split = $insertStack(i,split,simulate);
+            if (split.isEmpty()) break;
+        }
+        copy.grow(split.getCount());
+        return copy;
+    }
+
     ItemStack $extractStack(int slot, int amount, boolean simulate);
+    boolean $isValid(ItemStack stack);
+    void $setPredicate(Predicate<ItemStack> predicate);
 
     default CompoundTag serializeNoAir() {
         ListTag nbtTagList = new ListTag();
