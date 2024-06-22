@@ -37,7 +37,7 @@ public class TradeManager extends SimpleJsonResourceReloadListener {
                 Trade trade = fromJson(location, GsonHelper.convertToJsonObject(resourceLocationJsonElementEntry.getValue(), "top element"));
                 builder.put(location, trade);
 
-                allowedInputs.add(trade.input);
+                allowedInputs.add(trade.input());
 
             } catch (IllegalArgumentException | JsonParseException exception) {
                 LOGGER.error("Parsing error loading trade {}", location, exception);

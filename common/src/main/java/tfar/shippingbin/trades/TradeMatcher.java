@@ -1,8 +1,11 @@
 package tfar.shippingbin.trades;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import org.jetbrains.annotations.Nullable;
 import tfar.shippingbin.inventory.CommonHandler;
 
 import java.util.ArrayList;
@@ -12,7 +15,6 @@ import java.util.Map;
 public class TradeMatcher {
 
     public List<ItemStack> inputItems = new ArrayList<>();
-    public List<ItemStack> outputItems = new ArrayList<>();
 
     public void account(ItemStack stack) {
         for (ItemStack ex : inputItems)  {
@@ -31,39 +33,38 @@ public class TradeMatcher {
             if (trade.matches(stack)) {
                 while (trade.matches(stack)) {
                     c++;
-                    stack.shrink(trade.count);
+                    stack.shrink(trade.count());
                 }
             }
         }
         return c;
     }
 
-    public void fillOutputs(Trade trade,int count) {
-        for (ItemStack ex : outputItems)  {
-            if (ItemStack.isSameItemSameTags(ex,trade.getOutput())) {
-                ex.grow(trade.getOutput().getCount());
-                return;
-            }
-        }
-        outputItems.add(trade.getOutput());
-    }
-
     public boolean canOutputFit(CommonHandler commonHandler,ItemStack stack) {
         return commonHandler.$slotlessInsertStack(stack,stack.getCount(),true).isEmpty();
     }
 
-    public void trySellItems(CommonHandler input, CommonHandler output, Map<ResourceLocation, Integer> counts, Map<ResourceLocation, Trade> trades) {
+    public void trySellItems(CommonHandler input, CommonHandler output, Map<ResourceLocation, Integer> counts, Map<ResourceLocation, Trade> trades, @Nullable Player player, double multiplier) {
         for (Map.Entry<ResourceLocation,Integer> entry : counts.entrySet()) {
             Trade trade = trades.get(entry.getKey());
             int tradeCount = entry.getValue();
             if (trade != null) {
                 ItemStack tradeOutput = getTradeOutput(trade,tradeCount);
-                if (canOutputFit(output,tradeOutput)) {
-                    removeMatchingItems(input,trade.input,trade.count * tradeCount);
+
+                applyMultipliers(tradeOutput,player,multiplier,trade.attribute());
+
+                if (!tradeOutput.isEmpty() && canOutputFit(output,tradeOutput)) {
+                    removeMatchingItems(input,trade.input(),trade.count() * tradeCount);
                     output.$slotlessInsertStack(tradeOutput,tradeOutput.getCount(),false);
                 }
             }
         }
+    }
+
+    void applyMultipliers(ItemStack stack, @Nullable Player player, double multiplier,@Nullable Attribute attribute) {
+        double attributeMultiplier = player != null && attribute != null  && player.getAttribute(attribute) != null  ? player.getAttribute(attribute).getValue() : 1;
+        double totalMultiplier = attributeMultiplier * multiplier;
+        stack.setCount((int) (stack.getCount() *totalMultiplier));
     }
 
     public static void removeMatchingItems(CommonHandler handler, Ingredient ingredient,int count) {
@@ -85,7 +86,7 @@ public class TradeMatcher {
 
     public ItemStack getTradeOutput(Trade trade,int count) {
         if (count == 0) return ItemStack.EMPTY;
-        ItemStack copy = trade.getOutput().copy();
+        ItemStack copy = trade.output().copy();
         copy.setCount(copy.getCount() * count);
         return copy;
     }

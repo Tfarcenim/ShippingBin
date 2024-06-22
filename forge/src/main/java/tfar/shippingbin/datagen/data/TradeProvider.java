@@ -5,8 +5,11 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Items;
 import tfar.shippingbin.ShippingBin;
+import tfar.shippingbin.init.ModAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +42,7 @@ public class TradeProvider implements DataProvider {
     protected void buildTrades(Consumer<FinishedTrade> consumer) {
         TradeBuilder.builder(Items.DIAMOND,Items.DIRT).save(consumer);
         TradeBuilder.builderWithCount(Items.GOLD_INGOT,Items.IRON_INGOT,2).save(consumer);
+        TradeBuilder.builderWithCount(Items.COBBLESTONE, ItemTags.PLANKS,4).setAttribute(Attributes.ATTACK_DAMAGE).save(consumer);
     }
 
         @Override

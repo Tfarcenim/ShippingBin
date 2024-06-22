@@ -4,10 +4,12 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.event.level.SleepFinishedTimeEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -17,8 +19,10 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegisterEvent;
 import org.apache.commons.lang3.tuple.Pair;
+import org.stringtemplate.v4.debug.AddAttributeEvent;
 import tfar.shippingbin.client.ModClientForge;
 import tfar.shippingbin.datagen.ModDatagen;
+import tfar.shippingbin.init.ModAttributes;
 import tfar.shippingbin.trades.TradeManager;
 
 import java.util.*;
@@ -35,6 +39,7 @@ public class ShippingBinForge {
         bus.addListener(ModDatagen::gather);
         bus.addListener(this::register);
         bus.addListener(this::setup);
+        bus.addListener(this::addAttributes);
         MinecraftForge.EVENT_BUS.addListener(this::reloadListener);
         MinecraftForge.EVENT_BUS.addListener(this::serverTick);
         MinecraftForge.EVENT_BUS.addListener(this::onSleep);
@@ -46,6 +51,14 @@ public class ShippingBinForge {
         // Use Forge to bootstrap the Common mod.
         ShippingBin.init();
 
+    }
+
+    private void addAttributes(EntityAttributeModificationEvent event) {
+        event.add(EntityType.PLAYER, ModAttributes.SELL_MULTIPLIER);
+        event.add(EntityType.PLAYER, ModAttributes.CROP_SELL_MULTIPLIER);
+        event.add(EntityType.PLAYER, ModAttributes.MEAT_SELL_MULTIPLIER);
+        event.add(EntityType.PLAYER, ModAttributes.GEM_SELL_MULTIPLIER);
+        event.add(EntityType.PLAYER, ModAttributes.WOOD_SELL_MULTIPLIER);
     }
 
     private void onSleep(SleepFinishedTimeEvent event) {

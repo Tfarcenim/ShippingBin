@@ -3,6 +3,8 @@ package tfar.shippingbin;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -14,10 +16,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tfar.shippingbin.client.ModClient;
-import tfar.shippingbin.init.ModBlockEntityTypes;
-import tfar.shippingbin.init.ModBlocks;
-import tfar.shippingbin.init.ModItems;
-import tfar.shippingbin.init.ModMenuTypes;
+import tfar.shippingbin.init.*;
 import tfar.shippingbin.inventory.CommonHandler;
 import tfar.shippingbin.level.ShippingBinInventories;
 import tfar.shippingbin.platform.Services;
@@ -51,6 +50,7 @@ public class ShippingBin {
         Services.PLATFORM.registerAll(ModBlockEntityTypes.class, BuiltInRegistries.BLOCK_ENTITY_TYPE, BlockEntityType.class);
         Services.PLATFORM.registerAll(ModMenuTypes.class,BuiltInRegistries.MENU, MenuType.class);
         Services.PLATFORM.registerAll(ModItems.class,BuiltInRegistries.ITEM, Item.class);
+        Services.PLATFORM.registerAll(ModAttributes.class,BuiltInRegistries.ATTRIBUTE, Attribute.class);
     }
 
     public static ResourceLocation id(String path) {
@@ -73,6 +73,12 @@ public class ShippingBin {
             CommonHandler input = invs.getKey();
             CommonHandler output = invs.getValue();
 
+            UUID uuid = entry.getKey();
+
+            Player player = server.getPlayerList().getPlayer(uuid);
+
+            double multiplier =(player != null) ? player.getAttribute(ModAttributes.SELL_MULTIPLIER).getValue() :1;
+
             TradeMatcher tradeMatcher = new TradeMatcher();
 
             for (int i = 0; i < input.$getSlotCount();i++) {
@@ -92,12 +98,11 @@ public class ShippingBin {
                 Trade trade = tradeEntry.getValue();
                 int countTrades = tradeMatcher.countTrades(trade,false);
                 if (countTrades > 0) {
-                    tradeMatcher.fillOutputs(trade,countTrades);
                     counts.put(resourceLocation,countTrades);
                 }
             }
 
-            tradeMatcher.trySellItems(input,output,counts, serverTradeManager.getTrades());
+            tradeMatcher.trySellItems(input,output,counts, serverTradeManager.getTrades(),player,multiplier);
 
         }
     }

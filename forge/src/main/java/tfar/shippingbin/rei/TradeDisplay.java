@@ -1,16 +1,15 @@
 package tfar.shippingbin.rei;
 
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
-import me.shedaniel.rei.api.common.display.SimpleGridMenuDisplay;
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
-import me.shedaniel.rei.api.common.entry.EntryStack;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
 import me.shedaniel.rei.api.common.util.EntryStacks;
-import me.shedaniel.rei.plugin.common.displays.brewing.BrewingRecipe;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import org.jetbrains.annotations.Nullable;
 import tfar.shippingbin.trades.Trade;
 
 import java.util.List;
@@ -18,16 +17,19 @@ import java.util.Optional;
 
 public class TradeDisplay extends BasicDisplay{
 
+    final Attribute attribute;
+
     public TradeDisplay(Trade trade) {
-        this(trade.getInput(), trade.getCount(),trade.getOutput());
+        this(trade.input(), trade.count(),trade.output(),trade.attribute());
     }
 
-    public TradeDisplay(Ingredient input, int count, ItemStack output) {
-        this(List.of(createStackedIngredient(input,count)),List.of(EntryIngredients.of(output)),Optional.empty());
+    public TradeDisplay(Ingredient input, int count, ItemStack output, @Nullable Attribute attribute) {
+        this(List.of(createStackedIngredient(input,count)),List.of(EntryIngredients.of(output)),Optional.empty(),attribute);
     }
 
-    public TradeDisplay(List<EntryIngredient> inputs, List<EntryIngredient> outputs, Optional<ResourceLocation> location) {
+    public TradeDisplay(List<EntryIngredient> inputs, List<EntryIngredient> outputs, Optional<ResourceLocation> location,Attribute attribute) {
         super(inputs, outputs, location);
+        this.attribute = attribute;
     }
 
 
