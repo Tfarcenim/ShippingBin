@@ -15,6 +15,7 @@ public class ModItemModelProvider extends ItemModelGenerators {
 
     @Override
     public void run() {
+
     }
 
 }

@@ -2,6 +2,7 @@ package tfar.shippingbin.trades;
 
 import com.google.gson.*;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
@@ -12,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Trade {
@@ -96,4 +98,11 @@ public class Trade {
         }
     }
 
+    public Ingredient getInput() {
+        return input;
+    }
+
+    public int getCount() {
+        return count;
+    }
 }

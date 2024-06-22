@@ -3,6 +3,7 @@ package tfar.shippingbin.platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -13,6 +14,9 @@ import tfar.shippingbin.blockentity.ShippingBinBlockEntity;
 import tfar.shippingbin.blockentity.ShippingBinBlockEntityForge;
 import tfar.shippingbin.inventory.CommonHandler;
 import tfar.shippingbin.inventory.ForgeHandler;
+import tfar.shippingbin.network.PacketHandlerForge;
+import tfar.shippingbin.network.client.S2CModPacket;
+import tfar.shippingbin.network.server.C2SModPacket;
 import tfar.shippingbin.platform.services.IPlatformHelper;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
@@ -21,6 +25,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class ForgePlatformHelper implements IPlatformHelper {
@@ -69,6 +74,13 @@ public class ForgePlatformHelper implements IPlatformHelper {
     @Override
    public <H extends CommonHandler> ShippingBinBlockEntity<H> blockEntity(BlockEntityType<ShippingBinBlockEntity<?>> type, BlockPos pos, BlockState state) {
         return (ShippingBinBlockEntity<H>) new ShippingBinBlockEntityForge(type, pos, state);
+    }
+
+    int i;
+
+    @Override
+    public <MSG extends S2CModPacket> void registerClientPacket(Class<MSG> packetLocation, Function<FriendlyByteBuf, MSG> reader) {
+        PacketHandlerForge.INSTANCE.registerMessage(i++, packetLocation, MSG::write, reader, PacketHandlerForge.wrapS2C());
     }
 
 }
