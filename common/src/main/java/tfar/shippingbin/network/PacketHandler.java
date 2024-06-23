@@ -2,6 +2,7 @@ package tfar.shippingbin.network;
 
 
 import org.spongepowered.asm.mixin.MixinEnvironment;
+import tfar.shippingbin.network.client.S2CCompletedTradesPacket;
 import tfar.shippingbin.network.client.S2CTradePacket;
 import tfar.shippingbin.platform.Services;
 
@@ -15,5 +16,7 @@ public class PacketHandler {
 
     public static void registerClientPackets() {
         Services.PLATFORM.registerClientPacket(S2CTradePacket.class, S2CTradePacket::new);
+        Services.PLATFORM.registerClientPacket(S2CCompletedTradesPacket.class, S2CCompletedTradesPacket::new);
+
     }
 }

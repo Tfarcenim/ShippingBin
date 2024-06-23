@@ -6,5 +6,6 @@
   "attribute.shippingbin.wood_sell_multiplier": "Wood Sell Multiplier",
   "block.shippingbin.shipping_bin": "Shipping Bin",
   "category.shippingbin.trading": "Trading",
-  "category.shippingbin.trading.attribute": "Bonus: %s"
+  "category.shippingbin.trading.attribute": "Bonus: %s",
+  "shippingbin.toast.trade": "Sold %s %s for %s %s"
 }

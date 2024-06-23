@@ -3,6 +3,7 @@ package tfar.shippingbin;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
@@ -19,6 +20,7 @@ import tfar.shippingbin.client.ModClient;
 import tfar.shippingbin.init.*;
 import tfar.shippingbin.inventory.CommonHandler;
 import tfar.shippingbin.level.ShippingBinInventories;
+import tfar.shippingbin.network.PacketHandler;
 import tfar.shippingbin.platform.Services;
 import tfar.shippingbin.trades.Trade;
 import tfar.shippingbin.trades.TradeManager;
@@ -51,6 +53,7 @@ public class ShippingBin {
         Services.PLATFORM.registerAll(ModMenuTypes.class,BuiltInRegistries.MENU, MenuType.class);
         Services.PLATFORM.registerAll(ModItems.class,BuiltInRegistries.ITEM, Item.class);
         Services.PLATFORM.registerAll(ModAttributes.class,BuiltInRegistries.ATTRIBUTE, Attribute.class);
+        PacketHandler.registerPackets();
     }
 
     public static ResourceLocation id(String path) {
@@ -75,7 +78,7 @@ public class ShippingBin {
 
             UUID uuid = entry.getKey();
 
-            Player player = server.getPlayerList().getPlayer(uuid);
+            ServerPlayer player = server.getPlayerList().getPlayer(uuid);
 
             double multiplier =(player != null) ? player.getAttribute(ModAttributes.SELL_MULTIPLIER).getValue() :1;
 

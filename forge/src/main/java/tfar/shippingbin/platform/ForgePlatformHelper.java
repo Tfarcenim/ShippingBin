@@ -5,6 +5,7 @@ import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.commons.lang3.tuple.Pair;
@@ -83,4 +84,8 @@ public class ForgePlatformHelper implements IPlatformHelper {
         PacketHandlerForge.INSTANCE.registerMessage(i++, packetLocation, MSG::write, reader, PacketHandlerForge.wrapS2C());
     }
 
+    @Override
+    public void sendToClient(S2CModPacket msg, ServerPlayer player) {
+        PacketHandlerForge.sendToClient(msg,player);
+    }
 }

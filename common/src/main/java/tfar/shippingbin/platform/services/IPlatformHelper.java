@@ -3,6 +3,8 @@ package tfar.shippingbin.platform.services;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import tfar.shippingbin.blockentity.ShippingBinBlockEntity;
@@ -50,6 +52,9 @@ public interface IPlatformHelper {
     <H extends CommonHandler> H makeDummy(int slots);
     <H extends CommonHandler> ShippingBinBlockEntity<H> blockEntity(BlockEntityType<ShippingBinBlockEntity<?>> type, BlockPos pos, BlockState state);
     <MSG extends S2CModPacket> void registerClientPacket(Class<MSG> packetLocation, Function<FriendlyByteBuf,MSG> reader);
+
+
+    void sendToClient(S2CModPacket msg, ServerPlayer player);
 
 
 }

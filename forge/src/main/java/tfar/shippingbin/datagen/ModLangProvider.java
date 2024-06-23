@@ -28,6 +28,7 @@ public class ModLangProvider extends LanguageProvider {
         addDefaultBlock(() -> ModBlocks.SHIPPING_BIN);
         addTextComponent(Utils.TRADING,"Trading");
         add("category.shippingbin.trading.attribute","Bonus: %s");
+        add("shippingbin.toast.trade","Sold %s %s for %s %s");
         addAttribute(ModAttributes.SELL_MULTIPLIER,"Sell Multiplier");
         addAttribute(ModAttributes.WOOD_SELL_MULTIPLIER,"Wood Sell Multiplier");
         addAttribute(ModAttributes.GEM_SELL_MULTIPLIER,"Gem Sell Multiplier");

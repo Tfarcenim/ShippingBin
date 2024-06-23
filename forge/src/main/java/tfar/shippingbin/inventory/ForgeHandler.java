@@ -70,6 +70,7 @@ public class ForgeHandler extends SortingItemStackHandler implements CommonHandl
 
     @Override
     public boolean $isValid(ItemStack stack) {
+
         return predicate.test(stack);
     }
 

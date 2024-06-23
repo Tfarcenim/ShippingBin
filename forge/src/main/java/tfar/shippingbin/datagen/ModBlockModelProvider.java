@@ -20,7 +20,7 @@ public class ModBlockModelProvider extends BlockModelGenerators {
 
     @Override
     public void run() {
-        createNonTemplateModelBlock(ModBlocks.SHIPPING_BIN, Blocks.COMPOSTER);
+       // createNonTemplateModelBlock(ModBlocks.SHIPPING_BIN, Blocks.COMPOSTER);
         //this.createNonTemplateModelBlock(ModBlocks.MINEABLE_LAVA,Blocks.LAVA);
      //   this.createTrivialBlock(ModBlocks.LAVA_TNT, TexturedModel.CUBE_TOP_BOTTOM);
 

@@ -164,6 +164,11 @@ public class ShippingBinMenu<H extends CommonHandler> extends AbstractContainerM
         public boolean $isValid(ItemStack stack) {
             return false;
         }
+
+        @Override
+        public ItemStack $insertStack(int slot, @NotNull ItemStack stack, boolean simulate) {
+            return stack;
+        }
     }
 
     public ShippingBinMenu(MenuType<?> type, int id, Inventory inventory, H input, H output) {
