@@ -87,7 +87,7 @@ public class ShippingBin {
             for (int i = 0; i < input.$getSlotCount();i++) {
                 ItemStack stack = input.$getStack(i);
                 if (!stack.isEmpty()) {
-                    tradeMatcher.account(stack);
+                    tradeMatcher.account(stack.copy());
                 }
             }
 

@@ -143,11 +143,12 @@ public class ShippingBinMenu<H extends CommonHandler> extends AbstractContainerM
 
                 @Override
                 public boolean mayPlace(ItemStack stack) {
-                    return $isValid(stack);
+                    return HandlerWrapper.this != outputWrapper && $isValid(stack);
                 }
 
                 @Override
                 public ItemStack safeInsert(ItemStack stack, int amount) {
+                    if (HandlerWrapper.this == outputWrapper) return stack;
                     ItemStack stack1 = $slotlessInsertStack(stack,amount , false);
                     return stack1;
                 }

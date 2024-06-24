@@ -28,8 +28,12 @@ public interface CommonHandler {
             split = $insertStack(i,split,simulate);
             if (split.isEmpty()) break;
         }
-        copy.grow(split.getCount());
-        return copy;
+        if (!copy.isEmpty()) {
+            copy.grow(split.getCount());
+            return copy;
+        } else {
+            return split;
+        }
     }
 
     ItemStack $extractStack(int slot, int amount, boolean simulate);

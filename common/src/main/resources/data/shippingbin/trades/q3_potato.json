@@ -1,0 +1,16 @@
+{
+  "input": {
+    "count": 1,
+    "ingredient": {
+      "type": "forge:partial_nbt",
+      "item": "minecraft:baked_potato",
+      "nbt": {
+        "quality_food": {"quality": 3}
+      }
+    }
+  },
+  "output": {
+    "item": "minecraft:diamond",
+    "count": 2
+  }
+}
