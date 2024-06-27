@@ -103,6 +103,8 @@ public class TradeBuilder {
                 jsonObject.addProperty("nbt",stack.getTag().toString());
             }
 
+            jsonObject.addProperty("count",stack.getCount());
+
             return jsonObject;
         }
 

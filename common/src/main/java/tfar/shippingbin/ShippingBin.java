@@ -4,6 +4,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
@@ -53,6 +54,8 @@ public class ShippingBin {
         Services.PLATFORM.registerAll(ModMenuTypes.class,BuiltInRegistries.MENU, MenuType.class);
         Services.PLATFORM.registerAll(ModItems.class,BuiltInRegistries.ITEM, Item.class);
         Services.PLATFORM.registerAll(ModAttributes.class,BuiltInRegistries.ATTRIBUTE, Attribute.class);
+        Services.PLATFORM.registerAll(ModSounds.class,BuiltInRegistries.SOUND_EVENT, SoundEvent.class);
+
         PacketHandler.registerPackets();
     }
 
@@ -62,8 +65,8 @@ public class ShippingBin {
 
     public static void onSleep(Level level, long newTime) {
         long oldTime = level.getDayTime();
-        long oldDay = oldTime % 24000L;
-        long newDay = newTime % 24000L;
+        long oldDay = oldTime / 24000L;
+        long newDay = newTime / 24000L;
         if (newDay > oldDay) {
             sellItems(level.getServer());
         }

@@ -7,7 +7,11 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraftforge.common.crafting.DifferenceIngredient;
+import net.minecraftforge.common.crafting.PartialNBTIngredient;
 import tfar.shippingbin.ShippingBin;
 import tfar.shippingbin.init.ModAttributes;
 
@@ -40,9 +44,17 @@ public class TradeProvider implements DataProvider {
     }
 
     protected void buildTrades(Consumer<FinishedTrade> consumer) {
-        TradeBuilder.builder(Items.DIAMOND,Items.DIRT).save(consumer);
-        TradeBuilder.builderWithCount(Items.GOLD_INGOT,Items.IRON_INGOT,2).save(consumer);
-        TradeBuilder.builderWithCount(Items.COBBLESTONE, ItemTags.PLANKS,4).setAttribute(Attributes.ATTACK_DAMAGE).save(consumer);
+     //   TradeBuilder.builder(Items.DIAMOND,Items.DIRT).save(consumer);
+    //    TradeBuilder.builderWithCount(Items.GOLD_INGOT,Items.IRON_INGOT,2).save(consumer);
+     //   TradeBuilder.builderWithCount(Items.COBBLESTONE, ItemTags.PLANKS,4).setAttribute(Attributes.ATTACK_DAMAGE).save(consumer);
+
+    //    ItemStack qualityPotato = new ItemStack(Items.BAKED_POTATO);
+     //   qualityPotato.getOrCreateTagElement("quality_food").putInt("quality",3);
+
+    //    TradeBuilder.builderWithCount(new ItemStack(Items.DIAMOND,2),DifferenceIngredient.of(Ingredient.of(Items.BAKED_POTATO), PartialNBTIngredient.of(qualityPotato.getItem(),qualityPotato.getTag())),1).save(consumer,ShippingBin.id("regular_potato"));
+     //   TradeBuilder.builderWithCount(new ItemStack(Items.DIAMOND,3), PartialNBTIngredient.of(qualityPotato.getItem(),qualityPotato.getTag()),1).save(consumer,ShippingBin.id("quality_potato"));
+
+
     }
 
         @Override

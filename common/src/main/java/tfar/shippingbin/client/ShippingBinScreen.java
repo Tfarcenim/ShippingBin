@@ -1,5 +1,6 @@
 package tfar.shippingbin.client;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -10,7 +11,7 @@ import tfar.shippingbin.menu.ShippingBinMenu;
 
 public class ShippingBinScreen extends AbstractContainerScreen<ShippingBinMenu> {
 
-    private static final ResourceLocation TEXTURE_LOCATION = ShippingBin.id("textures/gui/shipping_bin.png");
+    private static final ResourceLocation TEXTURE_LOCATION = ShippingBin.id("textures/gui/shipping_bin2.png");
 
     public ShippingBinScreen(ShippingBinMenu $$0, Inventory $$1, Component $$2) {
         super($$0, $$1, $$2);
@@ -25,11 +26,6 @@ public class ShippingBinScreen extends AbstractContainerScreen<ShippingBinMenu> 
     }
 
     @Override
-    public boolean mouseDragged(double $$0, double $$1, int $$2, double $$3, double $$4) {
-        return super.mouseDragged($$0, $$1, $$2, $$3, $$4);
-    }
-
-    @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
@@ -38,8 +34,10 @@ public class ShippingBinScreen extends AbstractContainerScreen<ShippingBinMenu> 
 
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-        super.renderLabels(guiGraphics, mouseX, mouseY);
-        guiGraphics.drawString(font,Component.literal("Outputs"),titleLabelX,titleLabelY+68,0x404040,false);
+        guiGraphics.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY, ChatFormatting.WHITE.getColor(), false);
+       // guiGraphics.drawString(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 4210752, false);
+        //super.renderLabels(guiGraphics, mouseX, mouseY);
+        guiGraphics.drawString(font,Component.literal("Profits"),titleLabelX,titleLabelY+68, ChatFormatting.WHITE.getColor(),false);
     }
 
     public static ShippingBinScreen shippingBin(ShippingBinMenu barrelContainer, Inventory playerInventory, Component component) {

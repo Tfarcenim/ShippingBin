@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "b": {
+      "tag": "forge:barrels/wooden"
+    },
+    "t": {
+      "tag": "minecraft:trapdoors"
+    }
+  },
+  "pattern": [
+    "t",
+    "b"
+  ],
+  "result": {
+    "item": "shippingbin:shipping_bin"
+  },
+  "show_notification": true
+}

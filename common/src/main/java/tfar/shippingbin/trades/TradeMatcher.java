@@ -73,9 +73,8 @@ public class TradeMatcher {
                         isFirst = false;
                     }
 
-                    completedTrades.add(new CompletedTrade(
-                            Component.translatable("shippingbin.toast.trade",tradeCount * trade.count(),listComponent,tradeOutput.getCount(),tradeOutput.getHoverName()),soldItems.get(0).copyWithCount(1)));
-
+                        completedTrades.add(new CompletedTrade(
+                                Component.translatable("shippingbin.toast.trade", tradeCount * trade.count(), listComponent, tradeOutput.getCount(), tradeOutput.getHoverName()), soldItems.isEmpty() ? ItemStack.EMPTY :soldItems.get(0).copyWithCount(1)));
 
                     output.$slotlessInsertStack(tradeOutput,tradeOutput.getCount(),false);
                 }

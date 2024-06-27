@@ -1,0 +1,12 @@
+{
+  "block.shippingbin.open": {
+    "sounds": [
+      "shippingbin:open"
+    ]
+  },
+  "block.shippingbin.close": {
+    "sounds": [
+      "shippingbin:close"
+    ]
+  }
+}

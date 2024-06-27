@@ -1,6 +1,13 @@
 package tfar.shippingbin.menu;
 
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -8,6 +15,7 @@ import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import tfar.shippingbin.init.ModMenuTypes;
+import tfar.shippingbin.init.ModSounds;
 import tfar.shippingbin.inventory.CommonHandler;
 
 import java.util.Optional;
@@ -178,7 +186,11 @@ public class ShippingBinMenu<H extends CommonHandler> extends AbstractContainerM
         this.inputWrapper = (H) new HandlerWrapper(input);
         this.outputWrapper = (H) new OutputWrapper(output);
 
-        int containerX = 8;
+        if (!inventory.player.level().isClientSide) {
+            playSound(inventory.player, ModSounds.OPEN);
+        }
+
+            int containerX = 8;
         int containerY = 18;
         int height = 3;
         int width = 9;
@@ -205,6 +217,14 @@ public class ShippingBinMenu<H extends CommonHandler> extends AbstractContainerM
         for (int i = 0; i < 9; i++) {
             this.addSlot(new Slot(inventory, i, i * 18 + playerX, playerY + 58));
         }
+    }
+
+    void playSound(Player player, SoundEvent pSound) {
+        Vec3i vec3i = Direction.UP.getNormal();
+        double d0 = player.getX() + 0.5D + vec3i.getX() / 2.0D;
+        double d1 = player.getY() + 0.5D + vec3i.getY() / 2.0D;
+        double d2 = player.getZ() + 0.5D + vec3i.getZ() / 2.0D;
+        player.level().playSound(null, d0, d1, d2, pSound, SoundSource.BLOCKS, 0.5F, player.level().random.nextFloat() * 0.1F + 0.9F);
     }
 
     @Override
@@ -343,6 +363,14 @@ public class ShippingBinMenu<H extends CommonHandler> extends AbstractContainerM
         return flag;
     }
 
+    @Override
+    public void removed(Player $$0) {
+        super.removed($$0);
+        if ($$0 instanceof ServerPlayer) {
+            playSound($$0,ModSounds.CLOSE);
+        }
+
+    }
 
     @Override
     public boolean stillValid(Player player) {

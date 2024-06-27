@@ -5,9 +5,13 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.CreativeModeTabRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.event.level.SleepFinishedTimeEvent;
@@ -21,6 +25,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import tfar.shippingbin.client.ModClientForge;
 import tfar.shippingbin.datagen.ModDatagen;
 import tfar.shippingbin.init.ModAttributes;
+import tfar.shippingbin.init.ModItems;
 import tfar.shippingbin.trades.TradeManager;
 
 import java.util.*;
@@ -38,6 +43,7 @@ public class ShippingBinForge {
         bus.addListener(this::register);
         bus.addListener(this::setup);
         bus.addListener(this::addAttributes);
+        bus.addListener(this::creativeTab);
         MinecraftForge.EVENT_BUS.addListener(this::reloadListener);
         MinecraftForge.EVENT_BUS.addListener(this::serverTick);
         MinecraftForge.EVENT_BUS.addListener(this::onSleep);
@@ -49,6 +55,13 @@ public class ShippingBinForge {
         // Use Forge to bootstrap the Common mod.
         ShippingBin.init();
 
+    }
+
+    private void creativeTab(BuildCreativeModeTabContentsEvent event) {
+        CreativeModeTab tab = event.getTab();
+        if (event.getTabKey() == CreativeModeTabs.INVENTORY) {
+            event.accept(ModItems.SHIPPING_BIN);
+        }
     }
 
     private void addAttributes(EntityAttributeModificationEvent event) {
