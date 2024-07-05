@@ -10,6 +10,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraftforge.common.crafting.CompoundIngredient;
 import net.minecraftforge.common.crafting.DifferenceIngredient;
 import net.minecraftforge.common.crafting.PartialNBTIngredient;
 import tfar.shippingbin.ShippingBin;
@@ -43,16 +44,27 @@ public class TradeProvider implements DataProvider {
         return CompletableFuture.allOf(list.toArray(CompletableFuture[]::new));
     }
 
+    protected static boolean include = false;
+
     protected void buildTrades(Consumer<FinishedTrade> consumer) {
      //   TradeBuilder.builder(Items.DIAMOND,Items.DIRT).save(consumer);
     //    TradeBuilder.builderWithCount(Items.GOLD_INGOT,Items.IRON_INGOT,2).save(consumer);
      //   TradeBuilder.builderWithCount(Items.COBBLESTONE, ItemTags.PLANKS,4).setAttribute(Attributes.ATTACK_DAMAGE).save(consumer);
 
-    //    ItemStack qualityPotato = new ItemStack(Items.BAKED_POTATO);
-     //   qualityPotato.getOrCreateTagElement("quality_food").putInt("quality",3);
+        if (!include)return;
 
-    //    TradeBuilder.builderWithCount(new ItemStack(Items.DIAMOND,2),DifferenceIngredient.of(Ingredient.of(Items.BAKED_POTATO), PartialNBTIngredient.of(qualityPotato.getItem(),qualityPotato.getTag())),1).save(consumer,ShippingBin.id("regular_potato"));
-     //   TradeBuilder.builderWithCount(new ItemStack(Items.DIAMOND,3), PartialNBTIngredient.of(qualityPotato.getItem(),qualityPotato.getTag()),1).save(consumer,ShippingBin.id("quality_potato"));
+        ItemStack q3Potato = new ItemStack(Items.BAKED_POTATO);
+        q3Potato.getOrCreateTagElement("quality_food").putInt("quality",3);
+
+        ItemStack q2Potato = new ItemStack(Items.BAKED_POTATO);
+        q2Potato.getOrCreateTagElement("quality_food").putInt("quality",2);
+
+        ItemStack q1Potato = new ItemStack(Items.BAKED_POTATO);
+        q1Potato.getOrCreateTagElement("quality_food").putInt("quality",1);
+
+        TradeBuilder.builderWithCount(new ItemStack(Items.DIAMOND,2),DifferenceIngredient.of(Ingredient.of(Items.BAKED_POTATO),
+                CompoundIngredient.of(PartialNBTIngredient.of(q1Potato.getItem(),q1Potato.getTag()),PartialNBTIngredient.of(q2Potato.getItem(),q2Potato.getTag()),PartialNBTIngredient.of(q3Potato.getItem(),q3Potato.getTag()))),1).save(consumer,ShippingBin.id("regular_potato"));
+        TradeBuilder.builderWithCount(new ItemStack(Items.DIAMOND,3), PartialNBTIngredient.of(q3Potato.getItem(),q3Potato.getTag()),1).save(consumer,ShippingBin.id("quality_potato"));
 
 
     }

@@ -59,7 +59,7 @@ public class ShippingBinForge {
 
     private void creativeTab(BuildCreativeModeTabContentsEvent event) {
         CreativeModeTab tab = event.getTab();
-        if (event.getTabKey() == CreativeModeTabs.INVENTORY) {
+        if (event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
             event.accept(ModItems.SHIPPING_BIN);
         }
     }
