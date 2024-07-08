@@ -1,0 +1,13 @@
+{
+  "attribute": "shippingbin:gem_sell_multiplier",
+   "input": {
+    "count": 12,
+    "ingredient": {
+      "item": "minecraft:amethyst_shard"
+    }
+  },
+  "output": {
+    "item": "minecraft:emerald",
+    "count": 1
+  }
+}

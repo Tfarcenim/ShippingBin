@@ -1,0 +1,13 @@
+{
+  "attribute": "shippingbin:meat_sell_multiplier",
+   "input": {
+    "count": 14,
+    "ingredient": {
+      "item": "minecraft:salmon"
+    }
+  },
+  "output": {
+    "item": "minecraft:emerald",
+    "count": 1
+  }
+}

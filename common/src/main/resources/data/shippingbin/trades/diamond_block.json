@@ -1,0 +1,13 @@
+{
+  "attribute": "shippingbin:gem_sell_multiplier",
+   "input": {
+    "count": 1,
+    "ingredient": {
+      "item": "minecraft:diamond_block"
+    }
+  },
+  "output": {
+    "item": "minecraft:emerald",
+    "count": 18
+  }
+}

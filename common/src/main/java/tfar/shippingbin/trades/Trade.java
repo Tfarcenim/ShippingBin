@@ -14,7 +14,11 @@ public record Trade(Ingredient input, int count, ItemStack output, @Nullable Att
         return input.test(stack) && stack.getCount() >= count;
     }
 
+    @Nullable
     public static Trade deserialize(JsonObject jsonObject) {
+        if (jsonObject.size() == 0) {
+            return null;
+        }
         JsonObject input = jsonObject.getAsJsonObject("input");
         Ingredient ingredient = Ingredient.fromJson(input.getAsJsonObject("ingredient"));
         int count = GsonHelper.getAsInt(input, "count", 1);

@@ -1,0 +1,12 @@
+{
+   "input": {
+    "count": 5,
+    "ingredient": {
+      "item": "minecraft:baked_potato"
+    }
+  },
+  "output": {
+    "item": "minecraft:emerald",
+    "count": 2
+  }
+}

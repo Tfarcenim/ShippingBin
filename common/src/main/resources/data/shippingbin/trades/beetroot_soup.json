@@ -1,0 +1,12 @@
+{
+   "input": {
+    "count": 4,
+    "ingredient": {
+      "item": "minecraft:beetroot_soup"
+    }
+  },
+  "output": {
+    "item": "minecraft:emerald",
+    "count": 1
+  }
+}

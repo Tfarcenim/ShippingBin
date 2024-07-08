@@ -1,0 +1,12 @@
+{
+   "input": {
+    "count": 12,
+    "ingredient": {
+      "item": "minecraft:cookie"
+    }
+  },
+  "output": {
+    "item": "minecraft:emerald",
+    "count": 1
+  }
+}

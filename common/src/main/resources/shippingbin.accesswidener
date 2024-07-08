@@ -10,3 +10,6 @@ accessible class net/minecraft/client/gui/screens/MenuScreens$ScreenConstructor
 
 extendable method net/minecraft/world/inventory/AbstractContainerMenu doClick (IILnet/minecraft/world/inventory/ClickType;Lnet/minecraft/world/entity/player/Player;)V
 accessible method net/minecraft/world/inventory/AbstractContainerMenu tryItemClickBehaviourOverride (Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/inventory/ClickAction;Lnet/minecraft/world/inventory/Slot;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)Z
+
+accessible method net/minecraft/world/level/GameRules register (Ljava/lang/String;Lnet/minecraft/world/level/GameRules$Category;Lnet/minecraft/world/level/GameRules$Type;)Lnet/minecraft/world/level/GameRules$Key;
+accessible method net/minecraft/world/level/GameRules$BooleanValue create (Z)Lnet/minecraft/world/level/GameRules$Type;

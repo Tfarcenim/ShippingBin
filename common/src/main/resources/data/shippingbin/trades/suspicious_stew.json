@@ -1,0 +1,12 @@
+{
+   "input": {
+    "count": 1,
+    "ingredient": {
+      "item": "minecraft:suspicious_stew"
+    }
+  },
+  "output": {
+    "item": "minecraft:emerald",
+    "count": 1
+  }
+}

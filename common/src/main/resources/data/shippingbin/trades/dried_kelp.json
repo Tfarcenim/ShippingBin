@@ -1,0 +1,12 @@
+{
+   "input": {
+    "count": 48,
+    "ingredient": {
+      "item": "minecraft:dried_kelp"
+    }
+  },
+  "output": {
+    "item": "minecraft:emerald",
+    "count": 1
+  }
+}

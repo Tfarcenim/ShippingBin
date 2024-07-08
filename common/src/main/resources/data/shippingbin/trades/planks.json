@@ -1,0 +1,13 @@
+{
+  "attribute": "shippingbin:wood_sell_multiplier",
+   "input": {
+    "count": 64,
+    "ingredient": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "output": {
+    "item": "minecraft:emerald",
+    "count": 1
+  }
+}

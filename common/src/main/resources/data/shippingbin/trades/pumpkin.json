@@ -1,0 +1,13 @@
+{
+  "attribute": "shippingbin:crop_sell_multiplier",
+   "input": {
+    "count": 6,
+    "ingredient": {
+      "item": "minecraft:pumpkin"
+    }
+  },
+  "output": {
+    "item": "minecraft:emerald",
+    "count": 1
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "attribute": "shippingbin:crop_sell_multiplier",
+   "input": {
+    "count": 20,
+    "ingredient": {
+      "item": "minecraft:sweet_berries"
+    }
+  },
+  "output": {
+    "item": "minecraft:emerald",
+    "count": 1
+  }
+}

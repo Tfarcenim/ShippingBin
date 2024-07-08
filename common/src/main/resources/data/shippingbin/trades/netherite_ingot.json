@@ -1,0 +1,13 @@
+{
+  "attribute": "shippingbin:gem_sell_multiplier",
+   "input": {
+    "count": 1,
+    "ingredient": {
+      "item": "minecraft:netherite_ingot"
+    }
+  },
+  "output": {
+    "item": "minecraft:emerald",
+    "count": 3
+  }
+}

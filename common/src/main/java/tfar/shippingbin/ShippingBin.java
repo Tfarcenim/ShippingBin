@@ -11,6 +11,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -58,6 +59,8 @@ public class ShippingBin {
 
         PacketHandler.registerPackets();
     }
+
+
 
     public static ResourceLocation id(String path) {
         return new ResourceLocation(MOD_ID,path);

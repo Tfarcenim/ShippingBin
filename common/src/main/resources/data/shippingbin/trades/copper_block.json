@@ -1,0 +1,13 @@
+{
+  "attribute": "shippingbin:gem_sell_multiplier",
+   "input": {
+    "count": 4,
+    "ingredient": {
+      "item": "minecraft:copper_block"
+    }
+  },
+  "output": {
+    "item": "minecraft:emerald",
+    "count": 3
+  }
+} 
