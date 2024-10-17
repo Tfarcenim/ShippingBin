@@ -244,6 +244,9 @@ public class ShippingBinMenu<H extends CommonHandler> extends AbstractContainerM
                 if (!taken.isEmpty()) {
                     slot.onTake(player, stack);
                     player.addItem(taken);
+                    if (!taken.isEmpty()) {
+                        player.drop(taken,false);
+                    }
                 }
                 return taken;
             } else if (slotId-inputWrapper.$getSlotCount() < outputWrapper.$getSlotCount()) {
@@ -251,6 +254,9 @@ public class ShippingBinMenu<H extends CommonHandler> extends AbstractContainerM
                 if (!taken.isEmpty()) {
                     slot.onTake(player, stack);
                     player.addItem(taken);
+                    if (!taken.isEmpty()) {
+                        player.drop(taken,false);
+                    }
                 }
                 return taken;
             } else if (!this.moveItemStackTo(slotStack, 0, inputWrapper.$getSlotCount(), false)) {

@@ -41,7 +41,7 @@ public class TradeManager extends SimpleJsonResourceReloadListener {
                         builder.put(location, trade);
                         allowedInputs.add(trade.input());
                     }
-            } catch (IllegalArgumentException | JsonParseException exception) {
+            } catch (Exception exception) {
                 LOGGER.error("Parsing error loading trade {}", location, exception);
             }
         }

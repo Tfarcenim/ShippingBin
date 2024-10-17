@@ -19,11 +19,11 @@ public record Trade(Ingredient input, int count, ItemStack output, @Nullable Att
         if (jsonObject.size() == 0) {
             return null;
         }
-        JsonObject input = jsonObject.getAsJsonObject("input");
-        Ingredient ingredient = Ingredient.fromJson(input.getAsJsonObject("ingredient"));
+        JsonObject input = GsonHelper.getAsJsonObject(jsonObject,"input");
+        Ingredient ingredient = Ingredient.fromJson(GsonHelper.getNonNull(input,"ingredient"));
         int count = GsonHelper.getAsInt(input, "count", 1);
 
-        ItemStack stack = Utils.getItemStack(jsonObject.getAsJsonObject("output"), true);
+        ItemStack stack = Utils.getItemStack(GsonHelper.getAsJsonObject(jsonObject,"output"), true);
         Attribute attribute1 = jsonObject.has("attribute") ? Utils.getAttribute(jsonObject.get("attribute").getAsString()) : null;
         return new Trade(ingredient, count, stack,attribute1);
     }
