@@ -44,14 +44,13 @@ public class TradeProvider implements DataProvider {
         return CompletableFuture.allOf(list.toArray(CompletableFuture[]::new));
     }
 
-    protected static boolean include = false;
 
     protected void buildTrades(Consumer<FinishedTrade> consumer) {
      //   TradeBuilder.builder(Items.DIAMOND,Items.DIRT).save(consumer);
     //    TradeBuilder.builderWithCount(Items.GOLD_INGOT,Items.IRON_INGOT,2).save(consumer);
      //   TradeBuilder.builderWithCount(Items.COBBLESTONE, ItemTags.PLANKS,4).setAttribute(Attributes.ATTACK_DAMAGE).save(consumer);
 
-        if (!include)return;
+        if (true)return;
 
         ItemStack q3Potato = new ItemStack(Items.BAKED_POTATO);
         q3Potato.getOrCreateTagElement("quality_food").putInt("quality",3);

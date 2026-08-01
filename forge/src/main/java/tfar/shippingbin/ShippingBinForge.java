@@ -5,7 +5,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
@@ -36,6 +35,9 @@ import java.util.function.Supplier;
 public class ShippingBinForge {
 
     public ShippingBinForge() {
+
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER,ShippingBinConfig.Server.SPEC);
+        //ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT,ShippingBinConfig.Client.SPEC);
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         // This method is invoked by the Forge mod loader when it is ready
         // to load your mod. You can access Forge and Common code in this
@@ -61,7 +63,6 @@ public class ShippingBinForge {
     }
 
     private void creativeTab(BuildCreativeModeTabContentsEvent event) {
-        CreativeModeTab tab = event.getTab();
         if (event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
             event.accept(ModItems.SHIPPING_BIN);
         }
@@ -83,7 +84,8 @@ public class ShippingBinForge {
 
     private void serverTick(TickEvent.ServerTickEvent event) {
         MinecraftServer server = event.getServer();
-        if (event.phase == TickEvent.Phase.START && server.overworld().getDayTime() % 24000 == 18000) {
+        if (event.phase == TickEvent.Phase.START && server.overworld().getDayTime() % ShippingBinConfig.Server.SELLING_INTERVAL.get() ==
+                ShippingBinConfig.Server.SELLING_INTERVAL_OFFSET.get()) {
             ShippingBin.sellItems(server);
         }
     }

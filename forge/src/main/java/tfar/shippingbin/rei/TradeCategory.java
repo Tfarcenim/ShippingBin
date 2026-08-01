@@ -32,7 +32,7 @@ public class TradeCategory implements DisplayCategory<TradeDisplay> {
 
         widgets.add(Widgets.createSlot(new Point(startPoint.x + 64, startPoint.y)).entries(display.getOutputEntries().get(0)).markOutput());
         if (display.attribute != null) {
-            widgets.add(Widgets.createLabel(new Point(bounds.x + 26, bounds.getMaxY() - 12),Component.translatable("category.shippingbin.trading.attribute",Component.translatable(display.attribute.getDescriptionId())))
+            widgets.add(Widgets.createLabel(new Point(bounds.x + 14, bounds.getMaxY() - 12),Component.translatable("category.shippingbin.trading.attribute",Component.translatable(display.attribute.getDescriptionId())))
                     .color(0xFF404040, 0xFFBBBBBB).noShadow().leftAligned());
         }
 

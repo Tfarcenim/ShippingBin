@@ -12,7 +12,6 @@ public class ExampleMod implements ModInitializer {
         // project.
 
         // Use Fabric to bootstrap the Common mod.
-        ShippingBin.LOG.info("Hello Fabric world!");
         ShippingBin.init();
     }
 }
