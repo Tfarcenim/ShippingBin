@@ -37,7 +37,7 @@ public class ShippingBinForge {
     public ShippingBinForge() {
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER,ShippingBinConfig.Server.SPEC);
-        //ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT,ShippingBinConfig.Client.SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT,ShippingBinConfig.Client.SPEC);
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         // This method is invoked by the Forge mod loader when it is ready
         // to load your mod. You can access Forge and Common code in this
@@ -77,8 +77,8 @@ public class ShippingBinForge {
     }
 
     private void onSleep(SleepFinishedTimeEvent event) {
-        long newTime = event.getNewTime();
         Level level = (Level) event.getLevel();
+        long newTime = event.getNewTime();
         ShippingBin.onSleep(level,newTime);
     }
 

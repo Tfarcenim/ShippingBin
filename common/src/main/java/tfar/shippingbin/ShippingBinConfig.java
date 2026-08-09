@@ -25,9 +25,12 @@ public class ShippingBinConfig {
     public static class Client {
         public static final ForgeConfigSpec SPEC;
 
+        public static final ForgeConfigSpec.BooleanValue DISPLAY_SELL_TOAST;
+
         static {
             ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
             builder.push("general");
+            DISPLAY_SELL_TOAST = builder.define("display_sell_toast",true);
             builder.pop();
 
             SPEC = builder.build();

@@ -16,6 +16,8 @@ public class ForgeHandler extends SortingItemStackHandler implements CommonHandl
         super(slots);
     }
 
+    public Boolean isEmpty;
+
     @Override
     public int $getSlotCount() {
         return getSlots();
@@ -33,16 +35,19 @@ public class ForgeHandler extends SortingItemStackHandler implements CommonHandl
 
     @Override
     public void $setStack(int slot, ItemStack stack) {
+        isEmpty = null;
         setStackInSlot(slot, stack);
     }
 
     @Override
     public ItemStack $insertStack(int slot, @NotNull ItemStack stack, boolean simulate) {
+        isEmpty = null;
         return insertItem(slot, stack, simulate);
     }
 
     @Override
     public ItemStack $extractStack(int slot, int amount, boolean simulate) {
+        isEmpty = null;
         return extractItem(slot, amount, simulate);
     }
 
@@ -70,12 +75,19 @@ public class ForgeHandler extends SortingItemStackHandler implements CommonHandl
 
     @Override
     public boolean $isValid(ItemStack stack) {
-
         return predicate.test(stack);
     }
 
     @Override
-    public void $setPredicate(Predicate<ItemStack> predicate) {
+    public boolean isEmpty() {
+        if (isEmpty == null) {
+            isEmpty = stacks.stream().allMatch(ItemStack::isEmpty);
+            return isEmpty;
+        } else return isEmpty;
+    }
+
+    @Override
+    public void $setInputPredicate(Predicate<ItemStack> predicate) {
         this.predicate = predicate;
     }
 }

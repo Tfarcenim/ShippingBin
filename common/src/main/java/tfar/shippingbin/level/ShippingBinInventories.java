@@ -52,7 +52,7 @@ public class ShippingBinInventories extends SavedData {
     public Pair<CommonHandler,CommonHandler> getInventory(UUID uuid) {
         return handlerMap.computeIfAbsent(uuid,uuid1 -> {
             CommonHandler input = CommonHandler.create(CommonHandler.SLOTS);
-            input.$setPredicate(ONLY_INPUTS);
+            input.$setInputPredicate(ONLY_INPUTS);
             return Pair.of(input, CommonHandler.create(CommonHandler.SLOTS));
         });
     }
@@ -63,7 +63,7 @@ public class ShippingBinInventories extends SavedData {
             CompoundTag compoundTag1 = (CompoundTag)tag;
             UUID uuid = compoundTag1.getUUID("uuid");
             CommonHandler commonHandler = CommonHandler.create(CommonHandler.SLOTS);
-            commonHandler.$setPredicate(ONLY_INPUTS);
+            commonHandler.$setInputPredicate(ONLY_INPUTS);
             commonHandler.$deserialize(compoundTag1.getCompound("input"));
             CommonHandler output = CommonHandler.create(CommonHandler.SLOTS);
             output.$deserialize(compoundTag1.getCompound("output"));

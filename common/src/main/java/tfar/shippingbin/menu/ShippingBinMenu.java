@@ -5,9 +5,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -42,6 +40,11 @@ public class ShippingBinMenu<H extends CommonHandler> extends AbstractContainerM
         public HandlerWrapper(H wrapped) {
 
             this.wrapped = wrapped;
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return wrapped.isEmpty();
         }
 
         @Override
@@ -95,8 +98,8 @@ public class ShippingBinMenu<H extends CommonHandler> extends AbstractContainerM
         }
 
         @Override
-        public void $setPredicate(Predicate<ItemStack> predicate) {
-            wrapped.$setPredicate(predicate);
+        public void $setInputPredicate(Predicate<ItemStack> predicate) {
+            wrapped.$setInputPredicate(predicate);
         }
 
         @Override
