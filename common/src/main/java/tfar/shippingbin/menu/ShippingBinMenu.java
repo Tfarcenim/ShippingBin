@@ -64,7 +64,7 @@ public class ShippingBinMenu<H extends CommonHandler> extends AbstractContainerM
         }
 
         @Override
-        public CompoundTag $serialize() {
+        public CompoundTag $serialize(HolderLookup.Provider provider) {
             return null;
         }
 
@@ -308,7 +308,7 @@ public class ShippingBinMenu<H extends CommonHandler> extends AbstractContainerM
 
                 Slot slot = this.slots.get(i);
                 ItemStack itemstack = slot.getItem();
-                if (!itemstack.isEmpty() && slot.mayPlace(pStack) && ItemStack.isSameItemSameTags(pStack, itemstack)) {
+                if (!itemstack.isEmpty() && slot.mayPlace(pStack) && ItemStack.isSameItemSameComponents(pStack, itemstack)) {
                     int j = itemstack.getCount() + pStack.getCount();
                     int maxSize = Math.min(slot.getMaxStackSize(), pStack.getMaxStackSize());
                     if (j <= maxSize) {

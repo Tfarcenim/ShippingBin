@@ -1,5 +1,7 @@
 package tfar.shippingbin.level;
 
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -11,7 +13,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import tfar.shippingbin.ShippingBin;
 import tfar.shippingbin.inventory.CommonHandler;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -29,14 +30,14 @@ public class ShippingBinInventories extends SavedData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag compoundTag) {
+    public CompoundTag save(CompoundTag compoundTag, HolderLookup.Provider provider) {
         ListTag listTag = new ListTag();
         for (Map.Entry<UUID, Pair<CommonHandler, CommonHandler>> handlerEntry : handlerMap.entrySet()) {
             CompoundTag tag = new CompoundTag();
             tag.putUUID("uuid",handlerEntry.getKey());
             Pair<CommonHandler,CommonHandler> pair = handlerEntry.getValue();
-            tag.put("input",pair.getKey().$serialize());
-            tag.put("output",pair.getValue().$serialize());
+            tag.put("input",pair.getKey().$serialize(provider));
+            tag.put("output",pair.getValue().$serialize(provider));
             listTag.add(tag);
         }
 
@@ -57,28 +58,24 @@ public class ShippingBinInventories extends SavedData {
         });
     }
 
-    protected void load(CompoundTag compoundTag) {
+    protected void load(RegistryAccess registryAccess, CompoundTag compoundTag) {
         ListTag listTag = compoundTag.getList("contents", Tag.TAG_COMPOUND);
         for (Tag tag : listTag) {
             CompoundTag compoundTag1 = (CompoundTag)tag;
             UUID uuid = compoundTag1.getUUID("uuid");
             CommonHandler commonHandler = CommonHandler.create(CommonHandler.SLOTS);
             commonHandler.$setInputPredicate(ONLY_INPUTS);
-            commonHandler.$deserialize(, compoundTag1.getCompound("input"));
+            commonHandler.$deserialize(registryAccess, compoundTag1.getCompound("input"));
             CommonHandler output = CommonHandler.create(CommonHandler.SLOTS);
-            output.$deserialize(, compoundTag1.getCompound("output"));
+            output.$deserialize(registryAccess, compoundTag1.getCompound("output"));
             handlerMap.put(uuid,Pair.of(commonHandler,output));
         }
     }
 
-    @Override
-    public void save(File file) {
-        super.save(file);
-    }
-
     public static ShippingBinInventories getOrCreateInstance(MinecraftServer server) {
         ServerLevel overworld = server.overworld();
-        return overworld.getDataStorage().computeIfAbsent(compoundTag -> loadStatic(compoundTag,overworld), () -> new ShippingBinInventories(overworld), ShippingBin.MOD_ID);
+        return overworld.getDataStorage().computeIfAbsent(new Factory<>(() -> new ShippingBinInventories(overworld), (compoundTag, l) -> loadStatic(compoundTag, overworld), null),
+                ShippingBin.MOD_ID);
     }
 
     @Override
@@ -88,7 +85,7 @@ public class ShippingBinInventories extends SavedData {
 
     public static ShippingBinInventories loadStatic(CompoundTag compoundTag, ServerLevel level) {
         ShippingBinInventories inventories = new ShippingBinInventories(level);
-        inventories.load(compoundTag);
+        inventories.load(level.registryAccess(),compoundTag);
         return inventories;
     }
 }

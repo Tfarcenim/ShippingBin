@@ -7,12 +7,15 @@ import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.ToastComponent;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import tfar.shippingbin.trades.CompletedTrade;
 
 import java.util.List;
 
 public class CompletedTradeToast implements Toast {
+    private static final ResourceLocation BACKGROUND_SPRITE = ResourceLocation.withDefaultNamespace("toast/advancement");
+
     private final CompletedTrade completedTrade;
     long duration = 2500L;
 
@@ -25,7 +28,7 @@ public class CompletedTradeToast implements Toast {
     public Visibility render(GuiGraphics graphics, ToastComponent manager, long startTime) {
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            graphics.blit(TEXTURE, 0, 0, 0, 32, this.width(), this.height());
+        graphics.blitSprite(BACKGROUND_SPRITE, 0, 0, this.width(), this.height());
 
             List<FormattedCharSequence> split = manager.getMinecraft().font.split(completedTrade.message(),130);
 

@@ -34,7 +34,7 @@ public class ModDatagen {
         dataGenerator.addProvider(true,new ModBlockTagsProvider(packOutput,lookupProvider,existingFileHelper));
         dataGenerator.addProvider(true,new ModRecipeProvider(packOutput,lookupProvider));
 
-        dataGenerator.addProvider(true,new TradeProvider(packOutput));
+        dataGenerator.addProvider(true,new TradeProvider(packOutput,lookupProvider));
 
     }
 

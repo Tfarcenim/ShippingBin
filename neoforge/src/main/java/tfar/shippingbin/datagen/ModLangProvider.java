@@ -1,5 +1,6 @@
 package tfar.shippingbin.datagen;
 
+import net.minecraft.core.Holder;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.MutableComponent;
@@ -10,6 +11,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import org.codehaus.plexus.util.StringUtils;
+import org.jetbrains.annotations.UnknownNullability;
 import tfar.shippingbin.ShippingBin;
 import tfar.shippingbin.Utils;
 import tfar.shippingbin.init.ModAttributes;
@@ -44,8 +46,8 @@ public class ModLangProvider extends LanguageProvider {
         }
     }
 
-    protected void addAttribute(Attribute attribute,String key)  {
-        add(attribute.getDescriptionId(),key);
+    protected void addAttribute(@UnknownNullability Holder<Attribute> attribute, String key)  {
+        add(attribute.value().getDescriptionId(),key);
     }
 
 

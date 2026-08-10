@@ -3,6 +3,9 @@ package tfar.shippingbin.trades;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.*;
 import com.mojang.logging.LogUtils;
+import com.mojang.serialization.JsonOps;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -20,12 +23,15 @@ public class TradeManager extends SimpleJsonResourceReloadListener {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
     private static final Logger LOGGER = LogUtils.getLogger();
     private Map<ResourceLocation, Trade> trades;
+    private final HolderLookup.Provider registries;
+
     Set<Ingredient> allowedInputs = new HashSet<>();
     private boolean hasErrors;
 
-    public TradeManager() {
+    public TradeManager(HolderLookup.Provider pRegistries) {
         super(GSON, "trades");
         this.trades = ImmutableMap.of();
+        this.registries = pRegistries;
     }
 
     protected void apply(Map<ResourceLocation, JsonElement> map, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
@@ -34,9 +40,10 @@ public class TradeManager extends SimpleJsonResourceReloadListener {
 
         for (Map.Entry<ResourceLocation, JsonElement> resourceLocationJsonElementEntry : map.entrySet()) {
             ResourceLocation location = resourceLocationJsonElementEntry.getKey();
+            RegistryOps<JsonElement> registryops = this.registries.createSerializationContext(JsonOps.INSTANCE);
 
             try {
-                    Trade trade = fromJson(location, GsonHelper.convertToJsonObject(resourceLocationJsonElementEntry.getValue(), "top element"));
+                    Trade trade = fromJson(registryops, GsonHelper.convertToJsonObject(resourceLocationJsonElementEntry.getValue(), "top element"));
                     if (trade != null) {
                         builder.put(location, trade);
                         allowedInputs.add(trade.input());
@@ -61,8 +68,8 @@ public class TradeManager extends SimpleJsonResourceReloadListener {
         return allowedInputs.stream().anyMatch(ingredient -> ingredient.test(stack));
     }
 
-    public static Trade fromJson(ResourceLocation id, JsonObject jsonObject) {
-        return Trade.deserialize(jsonObject);
+    public static Trade fromJson(RegistryOps<JsonElement>ops, JsonObject jsonObject) {
+        return Trade.deserialize(ops,jsonObject);
     }
 
 }

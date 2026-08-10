@@ -1,9 +1,10 @@
 package tfar.shippingbin.platform.services;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -11,6 +12,7 @@ import tfar.shippingbin.blockentity.ShippingBinBlockEntity;
 import tfar.shippingbin.inventory.CommonHandler;
 import tfar.shippingbin.network.client.S2CModPacket;
 
+import java.lang.reflect.Type;
 import java.util.function.Function;
 
 public interface IPlatformHelper {
@@ -48,10 +50,9 @@ public interface IPlatformHelper {
     }
 
 
-    <F> void registerAll(Class<?> clazz, Registry<? super F> registry, Class<? super F> filter);
     <H extends CommonHandler> H makeDummy(int slots);
     <H extends CommonHandler> ShippingBinBlockEntity<H> blockEntity(BlockEntityType<ShippingBinBlockEntity<?>> type, BlockPos pos, BlockState state);
-    <MSG extends S2CModPacket> void registerClientPacket(Class<MSG> packetLocation, Function<FriendlyByteBuf,MSG> reader);
+    <MSG extends S2CModPacket> void registerClientPacket(CustomPacketPayload.Type<MSG> packetLocation, StreamCodec<RegistryFriendlyByteBuf,MSG> reader);
 
 
     void sendToClient(S2CModPacket msg, ServerPlayer player);

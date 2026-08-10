@@ -39,19 +39,16 @@ public class ShippingBinBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos,
-                                 Player player, InteractionHand hand, BlockHitResult result) {
-        if (!world.isClientSide) {
-            MenuProvider tileEntity = getMenuProvider(state,world,pos);
-            if (tileEntity != null) {
-                player.openMenu(tileEntity);
-            }
-            return InteractionResult.CONSUME;
-        } else {
-            return InteractionResult.SUCCESS;
-        }
-    }
-
+    protected InteractionResult useWithoutItem(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, BlockHitResult pHitResult) {
+            if (!pLevel.isClientSide) {
+                MenuProvider tileEntity = getMenuProvider(pState, pLevel, pPos);
+                if (tileEntity != null) {
+                    pPlayer.openMenu(tileEntity);
+                }
+                return InteractionResult.CONSUME;
+            } else {
+                return InteractionResult.SUCCESS;
+            }    }
 
     @javax.annotation.Nullable
     public MenuProvider getMenuProvider(BlockState $$0, Level $$1, BlockPos $$2) {

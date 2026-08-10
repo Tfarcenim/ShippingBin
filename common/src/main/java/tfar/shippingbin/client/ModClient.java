@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ModClient {
 
-    static final TradeManager tradeManager = new TradeManager();
+    static TradeManager tradeManager;
 
     public static void setup() {
         MenuScreens.register(ModMenuTypes.SHIPPING_BIN, (ShippingBinMenu barrelContainer, Inventory playerInventory, Component component) -> ShippingBinScreen.shippingBin(barrelContainer, playerInventory, component));
@@ -29,6 +29,9 @@ public class ModClient {
     }
 
     public static TradeManager getTradeManager() {
+        if (tradeManager == null) {
+            tradeManager = new TradeManager(Minecraft.getInstance().level.registryAccess());
+        }
         return tradeManager;
     }
 }

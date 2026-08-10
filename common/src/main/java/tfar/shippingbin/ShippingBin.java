@@ -1,5 +1,6 @@
 package tfar.shippingbin;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -52,20 +53,22 @@ public class ShippingBin {
     // write the majority of your code here and load it from your loader specific projects. This example has some
     // code that gets invoked by the entry point of the loader specific projects.
     public static void init() {
-        Services.PLATFORM.registerAll(ModBlocks.class, BuiltInRegistries.BLOCK, Block.class);
-        Services.PLATFORM.registerAll(ModBlockEntityTypes.class, BuiltInRegistries.BLOCK_ENTITY_TYPE, BlockEntityType.class);
-        Services.PLATFORM.registerAll(ModMenuTypes.class,BuiltInRegistries.MENU, MenuType.class);
-        Services.PLATFORM.registerAll(ModItems.class,BuiltInRegistries.ITEM, Item.class);
-        Services.PLATFORM.registerAll(ModAttributes.class,BuiltInRegistries.ATTRIBUTE, Attribute.class);
-        Services.PLATFORM.registerAll(ModSounds.class,BuiltInRegistries.SOUND_EVENT, SoundEvent.class);
+    }
 
-        PacketHandler.registerPackets();
+    public static void register() {
+        ModBlocks.init();
+        ModBlockEntityTypes.init();
+        ModMenuTypes.init();
+        ModItems.init();
+        ModAttributes.init();
+        ModSounds.init();
+
     }
 
 
 
     public static ResourceLocation id(String path) {
-        return new ResourceLocation(MOD_ID,path);
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID,path);
     }
 
     public static void onSleep(Level level, long newTime) {
@@ -115,7 +118,7 @@ public class ShippingBin {
 
                     if (hasTradeInputs(inputInv,trade)) {
                         ItemStack tradeOutput = trade.output();
-                        @Nullable Attribute tradeAttribute = trade.attribute();
+                        @Nullable Holder<Attribute> tradeAttribute = trade.attribute();
 
                         double attributeMultiplier = player != null && tradeAttribute != null  && player.getAttribute(tradeAttribute) != null ?
                                 player.getAttribute(tradeAttribute).getValue() : 1;

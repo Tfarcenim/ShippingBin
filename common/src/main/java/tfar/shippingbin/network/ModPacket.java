@@ -1,7 +1,6 @@
 package tfar.shippingbin.network;
 
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
-public interface ModPacket {
-    void write(FriendlyByteBuf to);
+public interface ModPacket extends CustomPacketPayload {
 }
