@@ -1,6 +1,5 @@
 package tfar.shippingbin.datagen.data;
 
-import com.google.gson.JsonObject;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -10,18 +9,18 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
-import org.jetbrains.annotations.Nullable;
+import tfar.shippingbin.IngredientAndCount;
 import tfar.shippingbin.trades.Trade;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class TradeBuilder {
 
     private final ItemStack result;
     private final int count;
     private final Ingredient ingredient;
-    @Nullable Holder<Attribute> attribute;
+    Optional<Holder<Attribute>> attribute =  Optional.empty();
 
     public TradeBuilder(ItemStack stack,Ingredient ingredient,int count) {
         this.result = stack;
@@ -51,13 +50,13 @@ public class TradeBuilder {
         return builderWithCount(new ItemStack(output),Ingredient.of(input),count);
     }
 
-    public TradeBuilder setAttribute(@Nullable Holder<Attribute> attribute) {
-        this.attribute = attribute;
+    public TradeBuilder setAttribute(Holder<Attribute> attribute) {
+        this.attribute = Optional.of(attribute);
         return this;
     }
 
     public void save(BiConsumer<Trade,ResourceLocation> output,ResourceLocation id) {
-        output.accept(new Trade(ingredient,count,result,attribute),id);
+        output.accept(new Trade(new IngredientAndCount(ingredient,count),result,attribute),id);
     }
 
     public void save(BiConsumer<Trade,ResourceLocation> output) {

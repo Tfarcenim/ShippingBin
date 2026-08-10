@@ -6,6 +6,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
+import tfar.shippingbin.ShippingBin;
 
 public class ModAttributes {
 
@@ -21,6 +22,6 @@ public class ModAttributes {
     }
 
     private static Holder<Attribute> register(String pName, Attribute pAttribute) {
-        return Registry.registerForHolder(BuiltInRegistries.ATTRIBUTE, ResourceLocation.withDefaultNamespace(pName), pAttribute);
+        return Registry.registerForHolder(BuiltInRegistries.ATTRIBUTE, ShippingBin.id(pName), pAttribute);
     }
 }

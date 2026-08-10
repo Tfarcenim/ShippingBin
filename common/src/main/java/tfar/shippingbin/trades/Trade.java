@@ -7,26 +7,36 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.RegistryOps;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
-import tfar.shippingbin.Utils;
+import tfar.shippingbin.IngredientAndCount;
 
-public record Trade(Ingredient input, int count, ItemStack output, @Nullable Holder<Attribute> attribute) {
+import java.util.Optional;
+
+public record Trade(IngredientAndCount input, ItemStack output, Optional<Holder<Attribute>> attribute) {
+
+    public static final StreamCodec<RegistryFriendlyByteBuf,Trade> STREAM_CODEC = StreamCodec.composite(
+            IngredientAndCount.STREAM_CODEC,Trade::input,
+            ItemStack.STREAM_CODEC,Trade::output,
+            ByteBufCodecs.optional(ByteBufCodecs.holderRegistry(Registries.ATTRIBUTE)),Trade::attribute,
+            Trade::new);
 
     public static final Codec<Trade> CODEC = RecordCodecBuilder.create(tradeInstance -> tradeInstance.group(
-            Ingredient.CODEC.fieldOf("input").forGetter(Trade::input),
-            Codec.INT.fieldOf("input_count").forGetter(Trade::count),
+            IngredientAndCount.CODEC.fieldOf("input").forGetter(Trade::input),
 
-            ItemStack.CODEC.fieldOf("input").forGetter(Trade::output),
-            BuiltInRegistries.ATTRIBUTE.holderByNameCodec().fieldOf("attribute").forGetter(Trade::attribute)
+            ItemStack.CODEC.fieldOf("output").forGetter(Trade::output),
+            BuiltInRegistries.ATTRIBUTE.holderByNameCodec().optionalFieldOf("attribute")
+                    .forGetter(Trade::attribute)
             ).apply(tradeInstance, Trade::new));
 
     public boolean matches(ItemStack stack) {
-        return input.test(stack) && stack.getCount() >= count;
+        return input.test(stack);
     }
 
     @Nullable

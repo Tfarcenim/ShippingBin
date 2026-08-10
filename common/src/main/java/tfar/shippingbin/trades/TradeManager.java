@@ -14,8 +14,6 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.slf4j.Logger;
-import tfar.shippingbin.ShippingBin;
-import tfar.shippingbin.platform.Services;
 
 import java.util.*;
 
@@ -46,7 +44,7 @@ public class TradeManager extends SimpleJsonResourceReloadListener {
                     Trade trade = fromJson(registryops, GsonHelper.convertToJsonObject(resourceLocationJsonElementEntry.getValue(), "top element"));
                     if (trade != null) {
                         builder.put(location, trade);
-                        allowedInputs.add(trade.input());
+                        allowedInputs.add(trade.input().ingredient());
                     }
             } catch (Exception exception) {
                 LOGGER.error("Parsing error loading trade {}", location, exception);
@@ -70,6 +68,11 @@ public class TradeManager extends SimpleJsonResourceReloadListener {
 
     public static Trade fromJson(RegistryOps<JsonElement>ops, JsonObject jsonObject) {
         return Trade.deserialize(ops,jsonObject);
+    }
+
+    public void replaceTrades(Map<ResourceLocation,Trade> trades) {
+        this.hasErrors = false;
+        this.trades = trades;
     }
 
 }

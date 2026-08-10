@@ -18,17 +18,18 @@ import java.util.Optional;
 
 public class TradeDisplay extends BasicDisplay{
 
-    final Holder<Attribute> attribute;
+    final Optional<Holder<Attribute>> attribute;
 
     public TradeDisplay(Trade trade) {
-        this(trade.input(), trade.count(),trade.output(),trade.attribute());
+        this(trade.input().ingredient(), trade.input().count(),trade.output(),trade.attribute());
     }
 
-    public TradeDisplay(Ingredient input, int count, ItemStack output, @Nullable Holder<Attribute> attribute) {
+    public TradeDisplay(Ingredient input, int count, ItemStack output, Optional<Holder<Attribute>> attribute) {
         this(List.of(createStackedIngredient(input,count)),List.of(EntryIngredients.of(output)),Optional.empty(),attribute);
     }
 
-    public TradeDisplay(List<EntryIngredient> inputs, List<EntryIngredient> outputs, Optional<ResourceLocation> location,Holder<Attribute> attribute) {
+    public TradeDisplay(List<EntryIngredient> inputs, List<EntryIngredient> outputs, Optional<ResourceLocation> location,
+                        Optional<Holder<Attribute>> attribute) {
         super(inputs, outputs, location);
         this.attribute = attribute;
     }

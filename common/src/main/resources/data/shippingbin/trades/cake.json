@@ -6,7 +6,7 @@
     }
   },
   "output": {
-    "item": "minecraft:emerald",
+    "id": "minecraft:emerald",
     "count": 2
   }
 }

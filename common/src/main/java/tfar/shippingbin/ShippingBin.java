@@ -1,32 +1,21 @@
 package tfar.shippingbin;
 
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.apache.commons.lang3.tuple.Pair;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tfar.shippingbin.client.ModClient;
 import tfar.shippingbin.init.*;
 import tfar.shippingbin.inventory.CommonHandler;
 import tfar.shippingbin.level.ShippingBinInventories;
-import tfar.shippingbin.network.PacketHandler;
 import tfar.shippingbin.network.client.S2CCompletedTradesPacket;
 import tfar.shippingbin.platform.Services;
 import tfar.shippingbin.trades.CompletedTrade;
@@ -118,10 +107,10 @@ public class ShippingBin {
 
                     if (hasTradeInputs(inputInv,trade)) {
                         ItemStack tradeOutput = trade.output();
-                        @Nullable Holder<Attribute> tradeAttribute = trade.attribute();
+                        Optional<Holder<Attribute>> tradeAttribute = trade.attribute();
 
-                        double attributeMultiplier = player != null && tradeAttribute != null  && player.getAttribute(tradeAttribute) != null ?
-                                player.getAttribute(tradeAttribute).getValue() : 1;
+                        double attributeMultiplier = player != null && tradeAttribute.isPresent() && player.getAttribute(tradeAttribute.orElse(null)) != null ?
+                                player.getAttribute(tradeAttribute.orElse(null)).getValue() : 1;
                         double totalMultiplier = attributeMultiplier * baseMultiplier;
                         ItemStack actualOutput = tradeOutput.copyWithCount((int) (tradeOutput.getCount() *totalMultiplier));
 
@@ -144,11 +133,11 @@ public class ShippingBin {
                     ResourceLocation resourceLocation = entry1.getKey();
                     Trade trade = tradeManager.getTrades().get(resourceLocation);
                     ItemStack tradeOutput = trade.output();
-                    ItemStack[] soldItems = trade.input().getItems();
+                    ItemStack[] soldItems = trade.input().ingredient().getItems();
                     completedTrades.add(new CompletedTrade(
                             //"Sold %s %s for %s %s"
                             Component.translatable("shippingbin.toast.trade",
-                                    entry1.getValue() * trade.count(),soldItems.length == 0 ?
+                                    entry1.getValue() * trade.input().count(),soldItems.length == 0 ?
                                             ItemStack.EMPTY :soldItems[0].copyWithCount(1).getHoverName(),
                                     tradeOutput.getCount(), tradeOutput.getHoverName()),
                             soldItems.length == 0 ? ItemStack.EMPTY :soldItems[0].copyWithCount(1)));
@@ -171,8 +160,8 @@ public class ShippingBin {
 
     static List<ItemStack> takeTradeInputs(CommonHandler input,Trade trade) {
         List<ItemStack> takenStacks =  new ArrayList<>();
-        Ingredient requiredInput = trade.input();
-        int remainingCount = trade.count();
+        Ingredient requiredInput = trade.input().ingredient();
+        int remainingCount = trade.input().count();
         for (int i = 0; i <= input.$getSlotCount(); i++) {
             ItemStack stack = input.$getStack(i);
             if (requiredInput.test(stack)) {
@@ -190,8 +179,8 @@ public class ShippingBin {
 
 
     static boolean hasTradeInputs(CommonHandler input,Trade trade) {
-        Ingredient requiredInput = trade.input();
-        int requiredCount = trade.count();
+        Ingredient requiredInput = trade.input().ingredient();
+        int requiredCount = trade.input().count();
         int totalCount = 0;
         for (int i = 0; i <= input.$getSlotCount(); i++) {
             ItemStack stack = input.$getStack(i);

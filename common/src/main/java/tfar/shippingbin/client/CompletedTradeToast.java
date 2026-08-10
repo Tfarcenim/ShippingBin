@@ -14,7 +14,7 @@ import tfar.shippingbin.trades.CompletedTrade;
 import java.util.List;
 
 public class CompletedTradeToast implements Toast {
-    private static final ResourceLocation BACKGROUND_SPRITE = ResourceLocation.withDefaultNamespace("toast/advancement");
+    private static final ResourceLocation BACKGROUND_SPRITE = ResourceLocation.withDefaultNamespace("toast/tutorial");
 
     private final CompletedTrade completedTrade;
     long duration = 2500L;

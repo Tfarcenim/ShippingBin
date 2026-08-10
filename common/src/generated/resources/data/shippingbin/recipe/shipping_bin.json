@@ -3,7 +3,7 @@
   "category": "misc",
   "key": {
     "b": {
-      "tag": "forge:barrels/wooden"
+      "tag": "c:barrels/wooden"
     },
     "t": {
       "tag": "minecraft:trapdoors"
@@ -14,7 +14,7 @@
     "b"
   ],
   "result": {
-    "item": "shippingbin:shipping_bin"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "shippingbin:shipping_bin"
+  }
 }
