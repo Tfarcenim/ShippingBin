@@ -14,7 +14,7 @@ import tfar.shippingbin.blockentity.ShippingBinBlockEntity;
 
 public class ModBlocks {
 
-    public static final Block SHIPPING_BIN = new ShippingBinBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(0.6F).sound(SoundType.WOOD).ignitedByLava(), ShippingBinBlockEntity.shippingBin());
+    public static final Block SHIPPING_BIN = new ShippingBinBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(0.6F).sound(SoundType.WOOD).ignitedByLava());
 
     static {
         Registry.register(BuiltInRegistries.BLOCK, ShippingBin.id("shipping_bin"), SHIPPING_BIN);

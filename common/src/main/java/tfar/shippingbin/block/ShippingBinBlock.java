@@ -22,11 +22,8 @@ import tfar.shippingbin.blockentity.ShippingBinBlockEntity;
 
 public class ShippingBinBlock extends Block implements EntityBlock {
 
-    protected final BlockEntityType.BlockEntitySupplier<ShippingBinBlockEntity<?>> supplier;
-
-    public ShippingBinBlock(Properties $$0, BlockEntityType.BlockEntitySupplier<ShippingBinBlockEntity<?>> supplier) {
+    public ShippingBinBlock(Properties $$0) {
         super($$0);
-        this.supplier = supplier;
     }
 
     @Override
@@ -59,6 +56,6 @@ public class ShippingBinBlock extends Block implements EntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-        return supplier.create(blockPos, blockState);
+        return new ShippingBinBlockEntity(blockPos, blockState);
     }
 }

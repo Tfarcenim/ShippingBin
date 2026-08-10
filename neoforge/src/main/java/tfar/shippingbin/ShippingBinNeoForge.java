@@ -8,12 +8,10 @@ import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.capabilities.ICapabilityProvider;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
@@ -23,14 +21,11 @@ import net.neoforged.neoforge.event.level.SleepFinishedTimeEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.registries.RegisterEvent;
-import org.jetbrains.annotations.Nullable;
-import tfar.shippingbin.blockentity.ShippingBinBlockEntity;
 import tfar.shippingbin.client.ModClientNeoForge;
 import tfar.shippingbin.datagen.ModDatagen;
 import tfar.shippingbin.init.ModAttributes;
 import tfar.shippingbin.init.ModBlockEntityTypes;
 import tfar.shippingbin.init.ModItems;
-import tfar.shippingbin.init.ModMenuTypes;
 import tfar.shippingbin.network.PacketHandlerNeoForge;
 import tfar.shippingbin.trades.TradeManager;
 
@@ -66,8 +61,8 @@ public class ShippingBinNeoForge {
     }
 
     void registerCapabilities(RegisterCapabilitiesEvent event) {
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntityTypes.SHIPPING_BIN,
-                (object, context) -> (IItemHandler)object.getServerInventory());
+        /*event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntityTypes.SHIPPING_BIN,
+                (object, context) -> (IItemHandler)object.getExternalWrapper());*/
     }
 
     private void creativeTab(BuildCreativeModeTabContentsEvent event) {

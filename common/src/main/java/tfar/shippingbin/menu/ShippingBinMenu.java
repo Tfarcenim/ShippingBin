@@ -20,25 +20,25 @@ import tfar.shippingbin.inventory.CommonHandler;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public class ShippingBinMenu<H extends CommonHandler> extends AbstractContainerMenu {
+public class ShippingBinMenu extends AbstractContainerMenu {
 
 
-    private final H inputWrapper;
-    private final H outputWrapper;
+    private final CommonHandler inputWrapper;
+    private final CommonHandler outputWrapper;
     public ShippingBinMenu(int id, Inventory inventory) {
         this(id, inventory, CommonHandler.create(CommonHandler.SLOTS), CommonHandler.create(CommonHandler.SLOTS));
     }
 
-    public ShippingBinMenu(int id, Inventory inventory, H input, H output) {
+    public ShippingBinMenu(int id, Inventory inventory, CommonHandler input, CommonHandler output) {
         this(ModMenuTypes.SHIPPING_BIN, id, inventory, input, output);
     }
 
 
     public class HandlerWrapper implements CommonHandler {
 
-        protected final H wrapped;
+        protected final CommonHandler wrapped;
 
-        public HandlerWrapper(H wrapped) {
+        public HandlerWrapper(CommonHandler wrapped) {
 
             this.wrapped = wrapped;
         }
@@ -61,16 +61,6 @@ public class ShippingBinMenu<H extends CommonHandler> extends AbstractContainerM
         @Override
         public void $setStack(int slot, ItemStack stack) {
             wrapped.$setStack(slot, stack);
-        }
-
-        @Override
-        public CompoundTag $serialize(HolderLookup.Provider provider) {
-            return null;
-        }
-
-        @Override
-        public void $deserialize(HolderLookup.Provider provider, CompoundTag invTag) {
-
         }
 
         @Override
@@ -169,7 +159,7 @@ public class ShippingBinMenu<H extends CommonHandler> extends AbstractContainerM
     }
 
     public class OutputWrapper extends HandlerWrapper {
-        public OutputWrapper(H wrapped) {
+        public OutputWrapper(CommonHandler wrapped) {
             super(wrapped);
         }
 
@@ -184,17 +174,17 @@ public class ShippingBinMenu<H extends CommonHandler> extends AbstractContainerM
         }
     }
 
-    public ShippingBinMenu(MenuType<?> type, int id, Inventory inventory, H input, H output) {
+    public ShippingBinMenu(MenuType<?> type, int id, Inventory inventory, CommonHandler input, CommonHandler output) {
         super(type, id);
 
-        this.inputWrapper = (H) new HandlerWrapper(input);
-        this.outputWrapper = (H) new OutputWrapper(output);
+        this.inputWrapper = new HandlerWrapper(input);
+        this.outputWrapper = new OutputWrapper(output);
 
         if (!inventory.player.level().isClientSide) {
             playSound(inventory.player, ModSounds.OPEN);
         }
 
-            int containerX = 8;
+        int containerX = 8;
         int containerY = 18;
         int height = 3;
         int width = 9;

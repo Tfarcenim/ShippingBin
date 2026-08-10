@@ -74,7 +74,9 @@ public class ShippingBinInventories extends SavedData {
 
     public static ShippingBinInventories getOrCreateInstance(MinecraftServer server) {
         ServerLevel overworld = server.overworld();
-        return overworld.getDataStorage().computeIfAbsent(new Factory<>(() -> new ShippingBinInventories(overworld), (compoundTag, l) -> loadStatic(compoundTag, overworld), null),
+        return overworld.getDataStorage().computeIfAbsent(
+                new Factory<>(() -> new ShippingBinInventories(overworld),
+                        (compoundTag, l) -> loadStatic(compoundTag, overworld), null),
                 ShippingBin.MOD_ID);
     }
 

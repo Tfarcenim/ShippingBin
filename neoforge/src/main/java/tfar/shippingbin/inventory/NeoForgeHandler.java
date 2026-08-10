@@ -8,11 +8,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
 
-public class ForgeHandler extends SortingItemStackHandler implements CommonHandler {
+public class NeoForgeHandler extends SortingItemStackHandler implements CommonHandler {
 
     protected Predicate<ItemStack> predicate = stack -> true;
 
-    public ForgeHandler(int slots) {
+    public NeoForgeHandler(int slots) {
         super(slots);
     }
 
@@ -26,11 +26,6 @@ public class ForgeHandler extends SortingItemStackHandler implements CommonHandl
     @Override
     public ItemStack $getStack(int slot) {
         return getStackInSlot(slot);
-    }
-
-    @Override
-    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
-        return serializeNoAir(provider);
     }
 
     @Override
@@ -49,18 +44,6 @@ public class ForgeHandler extends SortingItemStackHandler implements CommonHandl
     public ItemStack $extractStack(int slot, int amount, boolean simulate) {
         isEmpty = null;
         return extractItem(slot, amount, simulate);
-    }
-
-
-
-    @Override
-    public CompoundTag $serialize(HolderLookup.Provider provider) {
-        return serializeNBT(provider);
-    }
-
-    @Override
-    public void $deserialize(HolderLookup.Provider provider,CompoundTag invTag) {
-        deserializeNBT(provider,invTag);
     }
 
     @Override

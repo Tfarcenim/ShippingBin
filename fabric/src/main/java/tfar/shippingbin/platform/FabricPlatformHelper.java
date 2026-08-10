@@ -1,12 +1,9 @@
 package tfar.shippingbin.platform;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
 import tfar.shippingbin.blockentity.ShippingBinBlockEntity;
 import tfar.shippingbin.inventory.CommonHandler;
 import tfar.shippingbin.network.client.S2CModPacket;
@@ -38,11 +35,6 @@ public class FabricPlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public <H extends CommonHandler> ShippingBinBlockEntity<H> blockEntity(BlockEntityType<ShippingBinBlockEntity<?>> type, BlockPos pos, BlockState state) {
-        return null;
-    }
-
-    @Override
     public <MSG extends S2CModPacket> void registerClientPacket(CustomPacketPayload.Type<MSG> packetLocation, StreamCodec<RegistryFriendlyByteBuf, MSG> reader) {
 
     }
@@ -50,5 +42,10 @@ public class FabricPlatformHelper implements IPlatformHelper {
     @Override
     public void sendToClient(S2CModPacket msg, ServerPlayer player) {
 
+    }
+
+    @Override
+    public <H extends CommonHandler> H createExternalWrapper(ShippingBinBlockEntity shippingBinBlockEntity) {
+        return null;
     }
 }

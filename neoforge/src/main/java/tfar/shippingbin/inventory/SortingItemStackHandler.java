@@ -1,21 +1,14 @@
 package tfar.shippingbin.inventory;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 
-import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.NotNull;
-import tfar.shippingbin.ShippingBin;
 
 import java.util.List;
 
-public  abstract class SortingItemStackHandler implements IItemHandlerModifiable, INBTSerializable<CompoundTag> {
+public abstract class SortingItemStackHandler implements IItemHandlerModifiable {
     protected List<ItemStack> stacks;
 
     protected int max_slots;
@@ -23,20 +16,6 @@ public  abstract class SortingItemStackHandler implements IItemHandlerModifiable
     public SortingItemStackHandler(int slots) {
         max_slots = slots;
         stacks = NonNullList.withSize(max_slots,ItemStack.EMPTY);
-    }
-
-    @Override
-    public void deserializeNBT(HolderLookup.Provider provider,CompoundTag nbt) {
-        ListTag tagList = nbt.getList("Items", Tag.TAG_COMPOUND);
-        for (int i = 0; i < tagList.size(); i++) {
-            CompoundTag itemTags = tagList.getCompound(i);
-            int slot = itemTags.getInt("Slot");
-
-            if (slot >= 0 && slot < stacks.size())
-            {
-                stacks.set(slot, ItemStack.parseOptional(provider,itemTags));
-            }
-        }
     }
 
     @Override
