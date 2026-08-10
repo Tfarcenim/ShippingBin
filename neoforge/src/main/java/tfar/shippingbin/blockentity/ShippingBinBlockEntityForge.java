@@ -5,10 +5,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
+
+import net.neoforged.neoforge.items.IItemHandler;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,7 +19,6 @@ public class ShippingBinBlockEntityForge extends ShippingBinBlockEntity<ForgeHan
         super($$0, $$1, $$2);
     }
 
-    protected LazyOptional<ShippingBinWrapper> optional = LazyOptional.of(ShippingBinWrapper::new);
 
     public class ShippingBinWrapper implements IItemHandler {
 
@@ -86,11 +83,6 @@ public class ShippingBinBlockEntityForge extends ShippingBinBlockEntity<ForgeHan
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
             return ShippingBinInventories.ONLY_INPUTS.test(stack);
         }
-    }
-
-    @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        return cap == ForgeCapabilities.ITEM_HANDLER ? optional.cast() : super.getCapability(cap, side);
     }
 
     public ShippingBinBlockEntityForge(BlockPos $$1, BlockState $$2) {

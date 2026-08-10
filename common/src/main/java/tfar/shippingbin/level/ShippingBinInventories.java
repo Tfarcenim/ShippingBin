@@ -64,9 +64,9 @@ public class ShippingBinInventories extends SavedData {
             UUID uuid = compoundTag1.getUUID("uuid");
             CommonHandler commonHandler = CommonHandler.create(CommonHandler.SLOTS);
             commonHandler.$setInputPredicate(ONLY_INPUTS);
-            commonHandler.$deserialize(compoundTag1.getCompound("input"));
+            commonHandler.$deserialize(, compoundTag1.getCompound("input"));
             CommonHandler output = CommonHandler.create(CommonHandler.SLOTS);
-            output.$deserialize(compoundTag1.getCompound("output"));
+            output.$deserialize(, compoundTag1.getCompound("output"));
             handlerMap.put(uuid,Pair.of(commonHandler,output));
         }
     }

@@ -1,9 +1,9 @@
 package tfar.shippingbin.inventory;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
@@ -29,8 +29,8 @@ public class ForgeHandler extends SortingItemStackHandler implements CommonHandl
     }
 
     @Override
-    public CompoundTag serializeNBT() {
-        return serializeNoAir();
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
+        return serializeNoAir(provider);
     }
 
     @Override
@@ -54,18 +54,18 @@ public class ForgeHandler extends SortingItemStackHandler implements CommonHandl
 
 
     @Override
-    public CompoundTag $serialize() {
-        return serializeNBT();
+    public CompoundTag $serialize(HolderLookup.Provider provider) {
+        return serializeNBT(provider);
     }
 
     @Override
-    public void $deserialize(CompoundTag invTag) {
-        deserializeNBT(invTag);
+    public void $deserialize(HolderLookup.Provider provider,CompoundTag invTag) {
+        deserializeNBT(provider,invTag);
     }
 
     @Override
     public Slot addInvSlot(int slot, int x, int y) {
-        return new SlotItemHandler(this,slot,x,y);
+        return new net.neoforged.neoforge.items.SlotItemHandler(this,slot,x,y);
     }
 
     @Override

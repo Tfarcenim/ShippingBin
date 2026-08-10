@@ -1,5 +1,6 @@
 package tfar.shippingbin.inventory;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.inventory.Slot;
@@ -19,8 +20,8 @@ public interface CommonHandler {
     int $getSlotCount();
     ItemStack $getStack(int slot);
     void $setStack(int slot,ItemStack stack);
-    CompoundTag $serialize();
-    void $deserialize(CompoundTag invTag);
+    CompoundTag $serialize(HolderLookup.Provider provider);
+    void $deserialize(HolderLookup.Provider provider,CompoundTag invTag);
     Slot addInvSlot(int slot, int x, int y);
     int $getMaxStackSize(int slot);
     ItemStack $insertStack(int slot, @NotNull ItemStack stack, boolean simulate);
@@ -63,14 +64,14 @@ public interface CommonHandler {
     boolean $isValid(ItemStack stack);
     void $setInputPredicate(Predicate<ItemStack> predicate);
 
-    default CompoundTag serializeNoAir() {
+    default CompoundTag serializeNoAir(HolderLookup.Provider provider) {
         ListTag nbtTagList = new ListTag();
         for (int i = 0; i < $getSlotCount(); i++) {
             ItemStack stack = $getStack(i);
             if (!stack.isEmpty()) {
                 CompoundTag itemTag = new CompoundTag();
                 itemTag.putInt("Slot", i);
-                stack.save(itemTag);
+                stack.save(provider, itemTag);
                 nbtTagList.add(itemTag);
             }
         }

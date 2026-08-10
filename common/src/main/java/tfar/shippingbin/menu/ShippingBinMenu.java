@@ -1,6 +1,7 @@
 package tfar.shippingbin.menu;
 
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -68,7 +69,7 @@ public class ShippingBinMenu<H extends CommonHandler> extends AbstractContainerM
         }
 
         @Override
-        public void $deserialize(CompoundTag invTag) {
+        public void $deserialize(HolderLookup.Provider provider, CompoundTag invTag) {
 
         }
 

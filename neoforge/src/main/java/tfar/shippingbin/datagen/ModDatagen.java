@@ -7,8 +7,10 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.data.event.GatherDataEvent;
+
+
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 import tfar.shippingbin.ShippingBin;
 import tfar.shippingbin.datagen.data.ModBlockTagsProvider;
 import tfar.shippingbin.datagen.data.ModLootTableProvider;
@@ -28,9 +30,9 @@ public class ModDatagen {
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
       //  dataGenerator.addProvider(client,new ModModelProvider(packOutput));
         dataGenerator.addProvider(client,new ModLangProvider(packOutput));
-        dataGenerator.addProvider(true, ModLootTableProvider.create(packOutput));
+        dataGenerator.addProvider(true, ModLootTableProvider.create(packOutput,lookupProvider));
         dataGenerator.addProvider(true,new ModBlockTagsProvider(packOutput,lookupProvider,existingFileHelper));
-        dataGenerator.addProvider(true,new ModRecipeProvider(packOutput));
+        dataGenerator.addProvider(true,new ModRecipeProvider(packOutput,lookupProvider));
 
         dataGenerator.addProvider(true,new TradeProvider(packOutput));
 
