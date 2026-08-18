@@ -1,14 +1,12 @@
 package tfar.shippingbin.inventory;
 
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
 
-public class NeoForgeHandler extends SortingItemStackHandler implements CommonHandler {
+public class NeoForgeHandler extends ItemStackHandler implements CommonHandler {
 
     protected Predicate<ItemStack> predicate = stack -> true;
 
@@ -47,11 +45,6 @@ public class NeoForgeHandler extends SortingItemStackHandler implements CommonHa
     }
 
     @Override
-    public Slot addInvSlot(int slot, int x, int y) {
-        return new net.neoforged.neoforge.items.SlotItemHandler(this,slot,x,y);
-    }
-
-    @Override
     public int $getMaxStackSize(int slot) {
         return getSlotLimit(slot);
     }
@@ -65,8 +58,8 @@ public class NeoForgeHandler extends SortingItemStackHandler implements CommonHa
     public boolean isEmpty() {
         if (isEmpty == null) {
             isEmpty = stacks.stream().allMatch(ItemStack::isEmpty);
-            return isEmpty;
-        } else return isEmpty;
+        }
+        return isEmpty;
     }
 
     @Override

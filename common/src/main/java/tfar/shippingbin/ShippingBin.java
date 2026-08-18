@@ -182,7 +182,7 @@ public class ShippingBin {
         Ingredient requiredInput = trade.input().ingredient();
         int requiredCount = trade.input().count();
         int totalCount = 0;
-        for (int i = 0; i <= input.$getSlotCount(); i++) {
+        for (int i = 0; i < input.$getSlotCount(); i++) {
             ItemStack stack = input.$getStack(i);
             if (requiredInput.test(stack)) {
                 totalCount += stack.getCount();

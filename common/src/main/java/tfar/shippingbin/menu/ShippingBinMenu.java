@@ -1,12 +1,11 @@
 package tfar.shippingbin.menu;
 
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Vec3i;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -18,13 +17,12 @@ import tfar.shippingbin.init.ModSounds;
 import tfar.shippingbin.inventory.CommonHandler;
 
 import java.util.Optional;
-import java.util.function.Predicate;
 
 public class ShippingBinMenu extends AbstractContainerMenu {
 
 
-    private final CommonHandler inputWrapper;
-    private final CommonHandler outputWrapper;
+    private final CommonHandler input;
+    private final CommonHandler output;
     public ShippingBinMenu(int id, Inventory inventory) {
         this(id, inventory, CommonHandler.create(CommonHandler.SLOTS), CommonHandler.create(CommonHandler.SLOTS));
     }
@@ -34,151 +32,60 @@ public class ShippingBinMenu extends AbstractContainerMenu {
     }
 
 
-    public class HandlerWrapper implements CommonHandler {
+    public class WrapperSlot extends  Slot{
 
-        protected final CommonHandler wrapped;
+        private final CommonHandler commonHandler;
 
-        public HandlerWrapper(CommonHandler wrapped) {
+        private static final Container EMPTY = new SimpleContainer(0);
 
-            this.wrapped = wrapped;
+        public WrapperSlot(CommonHandler commonHandler, int pSlot, int pX, int pY) {
+            super(EMPTY, pSlot, pX, pY);
+            this.commonHandler = commonHandler;
         }
 
         @Override
-        public boolean isEmpty() {
-            return wrapped.isEmpty();
+            public ItemStack getItem() {
+                return commonHandler.$getStack(getContainerSlot());
+            }
+
+            @Override
+            public void set(ItemStack stack) {
+                commonHandler.$setStack(getContainerSlot(), stack);
+                setChanged();
+            }
+
+            @Override
+            public void setChanged() {
+            }
+
+            @Override
+            public int getMaxStackSize() {
+                return commonHandler.$getMaxStackSize(getContainerSlot());
+            }
+
+            @Override
+            @NotNull//IMPORTANT
+            public ItemStack remove(int amount) {
+                return commonHandler.$extractStack(getContainerSlot(), amount,false);
+            }
+
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return commonHandler != output && commonHandler.$isValid(stack);
+            }
+
+            @Override
+            public ItemStack safeInsert(ItemStack stack, int amount) {
+                if (commonHandler == output) return stack;
+                return super.safeInsert(stack, amount);
+            }
         }
-
-        @Override
-        public int $getSlotCount() {
-            return wrapped.$getSlotCount();
-        }
-
-        @Override
-        public ItemStack $getStack(int slot) {
-            return wrapped.$getStack(slot);
-        }
-
-        @Override
-        public void $setStack(int slot, ItemStack stack) {
-            wrapped.$setStack(slot, stack);
-        }
-
-        @Override
-        public int $getMaxStackSize(int slot) {
-            return wrapped.$getMaxStackSize(slot);
-        }
-
-        @Override
-        public ItemStack $insertStack(int slot, @NotNull ItemStack stack, boolean simulate) {
-            return wrapped.$insertStack(slot, stack, simulate);
-        }
-
-        @Override
-        public ItemStack $slotlessInsertStack(@NotNull ItemStack stack, int amount, boolean simulate) {
-            return wrapped.$slotlessInsertStack(stack, amount, simulate);
-        }
-
-        @Override
-        public ItemStack $extractStack(int slot, int amount, boolean simulate) {
-            return wrapped.$extractStack(slot, amount, simulate);
-        }
-
-        @Override
-        public boolean $isValid(ItemStack stack) {
-            return wrapped.$isValid(stack);
-        }
-
-        @Override
-        public void $setInputPredicate(Predicate<ItemStack> predicate) {
-            wrapped.$setInputPredicate(predicate);
-        }
-
-        @Override
-        public Slot addInvSlot(int slot, int x, int y) {
-            return new Slot(new SimpleContainer(0), slot, x, y) {
-
-                @Override
-                public ItemStack getItem() {
-                    return $getStack(slot);
-                }
-
-                @Override
-                public void set(ItemStack stack) {
-                    $setStack(slot, stack);
-                    setChanged();
-                }
-
-                @Override
-                public void setChanged() {
-                }
-
-                @Override
-                public int getMaxStackSize() {
-                    return $getMaxStackSize(slot);
-                }
-
-                @Override
-                @NotNull
-                public ItemStack remove(int amount) {
-                    return $extractStack(slot, amount,false);
-                }
-
-                @Override
-                public ItemStack safeTake(int count, int decrement, Player player) {
-                    Optional<ItemStack> $$3 = this.tryRemove(count, decrement, player);
-                    $$3.ifPresent((stack) -> {
-                        this.onTake(player, stack);
-                    });
-                    return $$3.orElse(ItemStack.EMPTY);
-                }
-
-                @Override
-                public void setByPlayer(ItemStack stack) {
-                    super.setByPlayer(stack);
-                }
-
-                @Override
-                public Optional<ItemStack> tryRemove(int count, int decrement, Player player) {
-                    ItemStack extract = $extractStack(slot, Math.min(count, decrement), false);
-                    return Optional.of(extract);
-                }
-
-                @Override
-                public boolean mayPlace(ItemStack stack) {
-                    return HandlerWrapper.this != outputWrapper && $isValid(stack);
-                }
-
-                @Override
-                public ItemStack safeInsert(ItemStack stack, int amount) {
-                    if (HandlerWrapper.this == outputWrapper) return stack;
-                    ItemStack stack1 = $slotlessInsertStack(stack,amount , false);
-                    return stack1;
-                }
-            };
-        }
-    }
-
-    public class OutputWrapper extends HandlerWrapper {
-        public OutputWrapper(CommonHandler wrapped) {
-            super(wrapped);
-        }
-
-        @Override
-        public boolean $isValid(ItemStack stack) {
-            return false;
-        }
-
-        @Override
-        public ItemStack $insertStack(int slot, @NotNull ItemStack stack, boolean simulate) {
-            return stack;
-        }
-    }
 
     public ShippingBinMenu(MenuType<?> type, int id, Inventory inventory, CommonHandler input, CommonHandler output) {
         super(type, id);
 
-        this.inputWrapper = new HandlerWrapper(input);
-        this.outputWrapper = new OutputWrapper(output);
+        this.input = input;
+        this.output = output;
 
         if (!inventory.player.level().isClientSide) {
             playSound(inventory.player, ModSounds.OPEN);
@@ -194,12 +101,12 @@ public class ShippingBinMenu extends AbstractContainerMenu {
 
         for (int i = 0; i < height; i++)
             for (int j = 0; j < width; j++)
-                addSlot(inputWrapper.addInvSlot(j + width * i, containerX + j * 18, containerY + i * 18));
+                addSlot(new WrapperSlot(this.input,j + width * i, containerX + j * 18, containerY + i * 18));
 
 
         for (int i = 0; i < height; i++)
             for (int j = 0; j < width; j++)
-                addSlot(outputWrapper.addInvSlot(j + width * i, containerX + j * 18, containerY + i * 18+ 54+13));
+                addSlot(new WrapperSlot(this.output,j + width * i, containerX + j * 18, containerY + i * 18+ 54+13));
 
 
         for (int i = 0; i < 3; i++) {
@@ -223,7 +130,7 @@ public class ShippingBinMenu extends AbstractContainerMenu {
 
     @Override
     public boolean canDragTo(Slot slot) {
-        return slot.index >= inputWrapper.$getSlotCount() + outputWrapper.$getSlotCount();
+        return slot.index >= input.$getSlotCount() + output.$getSlotCount();
     }
 
     @Override
@@ -233,8 +140,8 @@ public class ShippingBinMenu extends AbstractContainerMenu {
         if (slot != null && slot.hasItem()) {
             ItemStack slotStack = slot.getItem();
             stack = slotStack.copy();
-            if (slotId < inputWrapper.$getSlotCount()) {
-                ItemStack taken = inputWrapper.$extractStack(slotId,stack.getCount(),false);
+            if (slotId < input.$getSlotCount()) {
+                ItemStack taken = input.$extractStack(slotId,stack.getCount(),false);
                 if (!taken.isEmpty()) {
                     slot.onTake(player, stack);
                     player.addItem(taken);
@@ -243,8 +150,8 @@ public class ShippingBinMenu extends AbstractContainerMenu {
                     }
                 }
                 return taken;
-            } else if (slotId-inputWrapper.$getSlotCount() < outputWrapper.$getSlotCount()) {
-                ItemStack taken = outputWrapper.$extractStack(slotId-inputWrapper.$getSlotCount(),stack.getCount(),false);
+            } else if (slotId- input.$getSlotCount() < output.$getSlotCount()) {
+                ItemStack taken = output.$extractStack(slotId- input.$getSlotCount(),stack.getCount(),false);
                 if (!taken.isEmpty()) {
                     slot.onTake(player, stack);
                     player.addItem(taken);
@@ -253,7 +160,7 @@ public class ShippingBinMenu extends AbstractContainerMenu {
                     }
                 }
                 return taken;
-            } else if (!this.moveItemStackTo(slotStack, 0, inputWrapper.$getSlotCount(), false)) {
+            } else if (!this.moveItemStackTo(slotStack, 0, input.$getSlotCount(), false)) {
                 return ItemStack.EMPTY;
             }
 

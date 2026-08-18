@@ -4,7 +4,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
@@ -40,8 +39,6 @@ public interface CommonHandler {
             }
         }
     }
-
-    Slot addInvSlot(int slot, int x, int y);
 
     int $getMaxStackSize(int slot);
 
@@ -94,7 +91,6 @@ public interface CommonHandler {
             if (!stack.isEmpty()) {
                 CompoundTag itemTag = new CompoundTag();
                 itemTag.putInt("Slot", i);
-                ;
                 nbtTagList.add(stack.save(provider, itemTag));
             }
         }

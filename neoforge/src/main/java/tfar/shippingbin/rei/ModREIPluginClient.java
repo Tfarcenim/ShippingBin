@@ -34,7 +34,7 @@ public class ModREIPluginClient implements REIClientPlugin {
 
     @Override
     public void registerScreens(ScreenRegistry registry) {
-        registry.registerContainerClickArea(new Rectangle(88, 32, 28, 23), ShippingBinScreen.class, TRADING);
+        registry.registerContainerClickArea(new Rectangle(88, 2, 40, 14), ShippingBinScreen.class, TRADING);
     }
 
 }

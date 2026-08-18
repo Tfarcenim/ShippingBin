@@ -6,7 +6,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import tfar.shippingbin.ShippingBin;
@@ -15,7 +14,6 @@ import tfar.shippingbin.inventory.CommonHandler;
 import tfar.shippingbin.level.ShippingBinInventories;
 import tfar.shippingbin.network.client.S2CModPacket;
 
-import java.util.Objects;
 import java.util.function.Predicate;
 
 public interface IPlatformHelper {
@@ -159,11 +157,6 @@ public interface IPlatformHelper {
         @Override
         public void $setInputPredicate(Predicate<ItemStack> predicate) {
 
-        }
-
-        @Override
-        public Slot addInvSlot(int slot, int x, int y) {
-            return null;
         }
 
         ////////////
